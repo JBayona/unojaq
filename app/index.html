@@ -37,6 +37,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar" ng-init="activeMenu = 'parking'">
           <ul class="nav navbar-nav navbar-right">
+            <li ng-show="session" ng-class="{'active':activeMenu === '/fifa'}"><a href="#/fifa"><i class="mdi-toggle-radio-button-on"></i> Fifa</a></li>
             <li ng-show="session" ng-class="{'active':activeMenu === '/donuts'}"><a href="#/donuts"><i class="mdi-toggle-radio-button-on"></i> Donuts</a></li>
             <li ng-show="session" ng-class="{'active':activeMenu === '/main'}"><a href="#/main"><i class="mdi-notification-event-available"></i> Calendar</a></li>
             <li ng-show="session" class="dropdown">
@@ -119,6 +120,8 @@
         <script src="scripts/services/mailgunproxy.js"></script>
         <script src="scripts/services/mailgun.js"></script>
         <script src="scripts/services/parking.js"></script>
+        <script src="scripts/services/fifa.js"></script>
+        <script src="scripts/controllers/fifa.js"></script>
         <!-- endbuild -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
