@@ -1,0 +1,135 @@
+<div class="container-fluid">
+      <div class="well">
+        <div class="row">
+          <div class="col-md-12">
+          <div class="row" ng-show="emailSentConfirmation">
+            <div class="alert alert-dismissable alert-success">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <p>Your garage request has been sent successfully</p>
+              </div>
+            </div>
+            <button type="button" ng-click="openGarage()" class="btn btn-primary" ng-show="openGarageVisible() && !emailSent">Open garage</button>            
+            <p><b>Current turn:</b> {{currentUser.first_name}} {{currentUser.last_name}}</p>
+            <h2 class="text-center">{{ calendarTitle }}</h2>
+            <div class="row">
+              <div class="col-md-6 text-center">
+                <div class="btn-group">
+                  <button
+                    class="btn"
+                    mwl-date-modifier
+                    date="calendarDay"
+                    decrement="calendarView">
+                    Previous
+                  </button>
+                  <button
+                    class="btn"
+                    mwl-date-modifier
+                    date="calendarDay"
+                    set-to-today>
+                    Today
+                  </button>
+                  <button
+                    class="btn"
+                    mwl-date-modifier
+                    date="calendarDay"
+                    increment="calendarView">
+                    Next
+                  </button>
+                </div>
+              </div>
+              <br class="visible-xs visible-sm">
+              <div class="col-md-6 text-center">
+                <div class="btn-group">
+                  <label class="btn btn-sm" ng-model="calendarView" btn-radio="'year'">Year</label>
+                  <label class="btn btn-sm" ng-model="calendarView" btn-radio="'month'">Month</label>
+                  <label class="btn btn-sm" ng-model="calendarView" btn-radio="'week'">Week</label>
+                  <label class="btn btn-sm" ng-model="calendarView" btn-radio="'day'">Day</label>
+                </div>
+              </div>
+            </div>
+            <br>
+            <mwl-calendar
+              events="events"
+              view="calendarView"
+              view-title="calendarTitle"
+              current-day="calendarDay"
+              on-event-click="eventClicked(calendarEvent)"
+              on-event-times-changed="eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+              delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+              on-delete-event-click="eventDeleted(calendarEvent)"
+              auto-open="false"
+              day-view-start="06:00"
+              day-view-end="22:00"
+              day-view-split="30"
+              cell-modifier="modifyCell(calendarCell)">
+            </mwl-calendar>
+          </div>
+        </div>
+      </div>
+      <div class="well" ng-show="tokens>0 || session.fixed">
+        <div class="row">
+          <h4>New parking event</h4>
+          <p ng-hide="session.fixed"><b>Remaining tokens:</b> {{tokens}}</p>
+          <p ng-show="session.fixed && !session.parking_manager">Select start date and click "add" button to fill 3 more weeks</p>          
+          <p ng-show="session.fixed && session.parking_manager && !selectedUser.fixed">Adding event for: {{selectedUser.first_name}} {{selectedUser.last_name}}. Tokens:{{selectedUser.tokens}}</p>
+          <div class="row" ng-show="addedConfirmation">
+            <div class="alert alert-dismissable alert-success">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <p>Your event has been added</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">            
+            <div ng-show="session.parking_manager">
+              <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span ng-show="selectedUser">{{selectedUser.first_name}} {{selectedUser.last_name}}</span>
+              <span ng-hide="selectedUser">Select a user</span>
+              <b class="caret"></b><div class="ripple-wrapper"></div></a>
+              <ul class="dropdown-menu">
+                <li ng-repeat="user in users"><a href="javascript:void(0)" ng-click="$parent.selectUser(user)" ng-show="user.parking_user && user.fixed === false">{{user.first_name}} {{user.last_name}} t:{{user.tokens}}</a></li>
+              </ul>
+            </div>
+            <input type="text" class="form-control" ng-model="session.first_name" disabled ng-hide="session.parking_manager">
+          </div>
+          <div class="col-md-8">
+            <datepicker refresh-view="dateDisablePromise" ng-model="newEvent.date" date-disabled="disabled(date, mode)" show-weeks="false" class="well well-sm"> 
+                  </datepicker>
+          </div>
+          <div class="col-md-2">
+            <span id="addToCalendar"></span>
+            <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addEvent()"><i class="mdi-content-add"></i>Add</button></span>
+            <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addAndSync()"><i class="mdi-notification-sync"></i>Add & Sync</button></span>
+            <span ng-show="session.parking_manager && !selectedUser.fixed"><button class="btn btn-info" ng-click="addExternalEvent(selectedUser.objectId)">Add</button></span>
+            <span ng-show="newEvent.date && (session.fixed || (session.parking_manager && selectedUser.fixed))"><button class="btn btn-info" ng-click="addFixedEvent()">Add</button></span>
+          </div>
+        </div>
+      </div>
+      <div class="well" ng-show="session.beer_manager">
+        <div class="row">
+          <h4>New special event</h4>
+          <div class="row" ng-show="addedConfirmation">
+            <div class="alert alert-dismissable alert-success">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <p>Your event has been added</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <input type="text" class="form-control floating-label" placeholder="Title" ng-model="newSpecialEvent.title">
+          </div>
+          <div class="col-md-8">
+            <datepicker ng-model="newSpecialEvent.date" show-weeks="false" class="well well-sm"> 
+                  </datepicker>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-info" ng-show="newSpecialEvent.title" ng-click="addSpecialEvent()">Add</button>
+          </div>
+        </div>
+        
+      </div>
+      
+      
+
+    </div>

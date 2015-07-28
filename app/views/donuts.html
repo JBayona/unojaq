@@ -1,0 +1,165 @@
+<div class="panel-group" id="accordion">
+  <div class="panel panel-info" id="summaryPanel">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <a data-toggle="collapse" class="collapsed" href="javascript:void(0);" data-target="#summaryContent">
+          Rules
+        </a>
+      </h3>
+    </div>
+    <div id="summaryContent" class="collapse">
+      <div class="panel-body">
+        <ul>
+        	<li>
+        		No actualizar su status ni la fecha correspondiente en la wiki antes de las 9 am de Portland (de lunes a jueves)
+        		<ul>
+        			<li>
+        				No hay pretexto bajo ninguna circunstancia.
+        			</li>
+        		</ul>
+        	</li>
+        	<li>
+        		No actualizar su status ni la fecha correspondiente antes de la junta de los viernes: 9:00 am de Portland (haya o no haya junta).
+        		<ul>
+        			<li>
+        				No hay pretexto bajo ninguna circunstancia.
+        			</li>
+        		</ul>
+        	</li>
+        	<li>
+        		No dejar actualizado el status cuando se va de PTO/vacaciones con lo que hizo antes de irse y la fecha en que regresa.
+        	</li>
+        	<li>
+        		Tardar más de 10 minutos actualizando el status o no avisar que ya terminó antes de 10 minutos.
+        		<ul>
+        			<li>
+        				No aplica si es el último en actualizar.	
+        			</li>
+        			<li>
+        				No aplica si es antes de las 9 am ni después de las 6 pm hora de Guadalajara.
+        			</li>
+        		</ul>
+        	</li>
+        	<li>
+						Decir que ya se terminó de actualizar pero no darle Save y mantener bloqueada la wiki.      		
+        	</li>
+        	<li>
+        		Tratar de editar la wiki mientras alguien más que pidió su turno está actualizando.
+        	</li>
+        	<li>
+        		No pedir permiso para hacer home-office antes de las 8 am de Portland.
+        	</li>
+        	<li>
+        		Dejar desbloqueada la computadora de la oficina y que alguien más mande correo o ponga en Skype que paga donas.
+        		<ul>
+        			<li>
+        				No aplica en el celular o computadora personal.
+        			</li>
+        		</ul>
+        	</li>
+        	<li>
+        		Si se tiene el lugar de estacionamiento y va a hacer home-office, no delegar el lugar a alguien más (ya sea directamente y ofreciéndolo a todos) y hacer que quede desperdiciado el lugar.
+        	</li>
+        	<li>
+        		No llegar a las juntas presenciales al momento de su inicio.
+        	</li>
+        	<li>
+        		No llenar sus horas en Redmine respectivas a la quincena.
+        		<ul>
+        			<li>
+        				Límite: 4 pm de Guadalajara del día de la quincena.
+        			</li>
+        		</ul>
+        	</li>
+        	<li>
+        		Si no trae donas el día que le toca traer donas.
+        		<ul>
+        			<li>
+        				Se puede switchear el día con alguna otra persona que esté en el queue.
+        			</li>
+        		</ul>
+        	</li>
+        	<li>
+						Si eres de nuevo ingreso.	        		
+        	</li>
+        	<li>
+        		Si vas a dejar el proyecto de Vesta development.
+        	</li>
+        	<li>
+        		No estar presencialmente en la oficina si se tiene una junta con el dispositivo de TelePresence.
+        	</li>
+        </ul>
+        <b>SI LA REGLA O LA EXCEPCIÓN NO ESTÁ AQUÍ, NO VALE. NO HAY RETROACTIVIDAD EN LAS NUEVAS REGLAS.</b>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="well" ng-show="session.donut_manager">
+	<div class="row" ng-show="addedConfirmation">
+    <div class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <p>Your event has been added</p>
+    </div>
+  </div>
+	<div class="row">
+		<h4>New item</h4>
+	</div>
+	<div class="row">
+		<div class="">
+			<div class="col-md-2">			
+				<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+				<span ng-show="pageData.newEvent.selectedUser">{{pageData.newEvent.selectedUser.first_name}} {{pageData.newEvent.selectedUser.last_name}}</span>
+				<span ng-hide="pageData.newEvent.selectedUser">Select a user</span>
+				<b class="caret"></b><div class="ripple-wrapper"></div></a>
+				<ul class="dropdown-menu">
+	        <li ng-repeat="user in pageData.users"><a href="javascript:void(0)" ng-click="pageData.newEvent.selectedUser = user">{{user.first_name}} {{user.last_name}}</a></li>
+	      </ul>
+			</div>
+			<div class="col-md-5">
+				<input type="text" class="form-control" placeholder="Reason" ng-model="pageData.newEvent.reason">
+			</div>
+			<div class="col-md-2" ng-show="pageData.newEvent.reason && pageData.newEvent.selectedUser">
+				<a href="javascript:void(0)" ng-click="addEvent()" >Add</a>
+				
+			</div>
+		</div>
+		
+	</div>
+</div>
+<div class="well">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+	      <table class="table table-hover">
+	        <thead>
+	          <tr>      
+	          	<th></th>  
+	            <th>Name</th>
+	            <th>Reason</th>
+	            <th>Date added</th>
+	            <th>Payment date</th>
+	            <th></th>
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <tr ng-repeat="item in pageData.events" ng-class="{'me':item.user.objectId === session.objectId}">
+	          	<td>{{$index+1}}</td>
+	            <td>{{item.user.first_name}} {{item.user.last_name}} <span class="badge donut-badge">{{$parent.pageData.donutsByUser[item.user.objectId]}}</span></td>
+	            <td>{{item.reason}}</td>
+	            <td>{{item.createdAt|date}}</td>
+	            <td>{{item.paymentDate|date}}</td>
+	            <td ng-show="session.donut_manager">
+	            <a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
+	            <i class="mdi-action-delete" ng-click="item.delete = true"></i>
+	            </a>
+              <span ng-show="item.delete">
+                <a href="javascript:void(0);" class="btn-link" ng-click="deleteEvent(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
+                <a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
+              </span></td>
+	          </tr>
+	        </tbody>
+	      </table>  
+	    </div>
+		</div>
+	</div>
+</div>
