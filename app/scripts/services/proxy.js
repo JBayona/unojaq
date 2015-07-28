@@ -9,13 +9,14 @@
  */
 angular.module('vestaParkingApp')
   .service('Proxy',['$q','$http', function Proxy($q,$http) {
-  	var restCall = function(method,data,url,params,headers){
+  	var restCall = function(method,data,url,params,headers,external){
   		var defer = $q.defer();
-  		var reqHeaders = {
+  		var reqHeaders = external ? {} : {
 		    'X-Parse-Application-Id': 'HMgEYiz7FYsYo4yymyJzcjkIzBuxo5SZDfKKBAoJ',
-				'X-Parse-REST-API-Key': 'N9aoa2aWcwYWmNjKNc0DuTHALh28YHzVf2C8S4QW',
+			'X-Parse-REST-API-Key': 'N9aoa2aWcwYWmNjKNc0DuTHALh28YHzVf2C8S4QW',
 		    'Content-Type':'application/json'
 		  };
+
   		if(headers){
 		  	angular.forEach(headers,function(value,key){
 		  		reqHeaders[key] = value;
@@ -53,6 +54,11 @@ angular.module('vestaParkingApp')
 			return restCall('GET',{},url,params,headers);
 		};
 
+		var getExternalCall = function(url,params,headers){
+			params = params ? params:{};
+			return restCall('GET',{},url,params,headers,true);
+		};
+
 		var deleteCall = function(data,url){
 			return restCall('DELETE',data,url);
 		};
@@ -63,6 +69,7 @@ angular.module('vestaParkingApp')
 			postCall:postCall,
 			putCall:putCall,
 			getCall:getCall,
+			getExternalCall:getExternalCall,
 			deleteCall:deleteCall
 		}
     // AngularJS will instantiate a singleton by calling "new" on this function

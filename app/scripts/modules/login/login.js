@@ -29,6 +29,10 @@ angular
         templateUrl: 'views/donuts.html',
         controller: 'DonutsCtrl',
         auth: true
+      }).when('/fifa', {
+        templateUrl: 'views/fifa.html',
+        controller: 'FifaCtrl',
+        auth: true
       }).otherwise({
         redirectTo: '/'
       });
