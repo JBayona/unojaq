@@ -9,7 +9,8 @@
  */
 angular.module('vestaParkingApp')
   .controller('TournamentsCtrl',['$scope','Fifa','LoginService','$filter', function ($scope,Fifa,LoginService,$filter) {
-  	$scope.pageData = {};      
+  	$scope.pageData = {};    
+    $scope.pageData.newMatch = {};  
     $scope.pageData.leaguesByCountry = {};
     $scope.currentPage = 0;
 		$scope.pageSize = 16;
@@ -46,46 +47,62 @@ angular.module('vestaParkingApp')
     	};
     };
 
-    var getTable = function(){
-    	$scope.pageData.table = {};
-    	angular.forEach($scope.pageData.tournamentMatches,function(match){
-    		if(match.wildcard || match.playoffs){
+    var getTable = function(matchArray,outputArray,includeWildCardAndPlayoffs){
+    	var table = {};
+      matchArray = matchArray ? matchArray : $scope.pageData.tournamentMatches;
+      if(!outputArray){
+        $scope.pageData.tableArray = [];
+      };
+      outputArray = outputArray ? outputArray : $scope.pageData.tableArray;
+      includeWildCardAndPlayoffs = includeWildCardAndPlayoffs ? includeWildCardAndPlayoffs : false;
+    	angular.forEach(matchArray,function(match){
+    		if(!includeWildCardAndPlayoffs && (match.wildcard || match.playoffs)){
     			return;
     		}
     		//add points
-    		if(!$scope.pageData.table[match.home.objectId]){
-    			$scope.pageData.table[match.home.objectId] = getEmptyTableRow();
-    			$scope.pageData.table[match.home.objectId].player = match.home.objectId;
+    		if(!table[match.home.objectId]){
+    			table[match.home.objectId] = getEmptyTableRow();
+    			table[match.home.objectId].player = match.home;
     		}
-    		if(!$scope.pageData.table[match.away.objectId]){
-    			$scope.pageData.table[match.away.objectId] = getEmptyTableRow();
-    			$scope.pageData.table[match.away.objectId].player = match.away.objectId;
+    		if(!table[match.away.objectId]){
+    			table[match.away.objectId] = getEmptyTableRow();
+    			table[match.away.objectId].player = match.away;
     		}
     		if(match.home_score === match.away_score){
-    			$scope.pageData.table[match.home.objectId].points += 1;
-    			$scope.pageData.table[match.away.objectId].points += 1;
-    			$scope.pageData.table[match.home.objectId].draw += 1;
-    			$scope.pageData.table[match.away.objectId].draw += 1
+          if(match.home_penalties && match.away_penalties && match.home_penalties > match.away_penalties){
+            table[match.home.objectId].points += 3;   
+            table[match.home.objectId].win += 1; 
+            table[match.away.objectId].lost += 1;  
+          }else if(match.home_penalties && match.away_penalties && match.home_penalties < match.away_penalties){
+            table[match.away.objectId].points += 3; 
+            table[match.home.objectId].lost += 1; 
+            table[match.away.objectId].win += 1;   
+          }else{
+            table[match.home.objectId].points += 1;
+            table[match.away.objectId].points += 1;
+            table[match.home.objectId].draw += 1;
+            table[match.away.objectId].draw += 1  
+          }
+    			
     		}else if(match.home_score > match.away_score){
-    			$scope.pageData.table[match.home.objectId].points += 3;   
-    			$scope.pageData.table[match.home.objectId].win += 1; 
-    			$scope.pageData.table[match.away.objectId].lost += 1;    	
+    			table[match.home.objectId].points += 3;   
+    			table[match.home.objectId].win += 1; 
+    			table[match.away.objectId].lost += 1;    	
     		}else if(match.away_score > match.home_score){
-    			$scope.pageData.table[match.away.objectId].points += 3; 
-    			$scope.pageData.table[match.home.objectId].lost += 1; 
-    			$scope.pageData.table[match.away.objectId].win += 1;     	
+    			table[match.away.objectId].points += 3; 
+    			table[match.home.objectId].lost += 1; 
+    			table[match.away.objectId].win += 1;     	
     		}
-    		$scope.pageData.table[match.home.objectId].scored += match.home_score;
-    		$scope.pageData.table[match.away.objectId].received += match.home_score;
-    		$scope.pageData.table[match.away.objectId].scored += match.away_score;
-    		$scope.pageData.table[match.home.objectId].received += match.away_score;
-    		$scope.pageData.table[match.home.objectId].played += 1;
-    		$scope.pageData.table[match.away.objectId].played += 1;    		
+    		table[match.home.objectId].scored += match.home_score;
+    		table[match.away.objectId].received += match.home_score;
+    		table[match.away.objectId].scored += match.away_score;
+    		table[match.home.objectId].received += match.away_score;
+    		table[match.home.objectId].played += 1;
+    		table[match.away.objectId].played += 1;    		
     	});
-			$scope.pageData.tableArray = [];
-			angular.forEach($scope.pageData.table,function(tableRow){
+			angular.forEach(table,function(tableRow){
 				tableRow.diff = tableRow.scored - tableRow.received;
-				$scope.pageData.tableArray.push(tableRow);
+				outputArray.push(tableRow);
 			});
 			$scope.order(['-points','-diff'],false);
     };
@@ -93,6 +110,7 @@ angular.module('vestaParkingApp')
     var getTournamentMatches = function(tournamentId){    	
     	Fifa.getTournamentMatches(tournamentId).then(function(response){
     		$scope.pageData.tournamentMatches = response.results;
+        $scope.pageData.tournamentMatchesBk = response.results;
     		getTable();
     	});
     };
@@ -126,8 +144,27 @@ angular.module('vestaParkingApp')
 	    });
     };
 
+    var getPlayedGames = function(){
+      if(!$scope.pageData.newMatch.home || !$scope.pageData.newMatch.away){
+        return;
+      }
+      $scope.pageData.faceToFaceMatches = [];
+      $scope.pageData.faceToFaceTable = [];
+      Fifa.getPlayerMatches($scope.pageData.newMatch.home.player.objectId,$scope.pageData.newMatch.away.player.objectId).then(function(response){
+        angular.forEach(response.results,function(match){
+          $scope.pageData.faceToFaceMatches.push(match);
+        });
+        getTable($scope.pageData.faceToFaceMatches,$scope.pageData.faceToFaceTable,true);
+      });
+      var playedGames = $scope.matchFilter($scope.pageData.newMatch.home.player,$scope.pageData.tournamentMatchesBk);
+      $scope.pageData.newMatch.playedGames = $scope.matchFilter($scope.pageData.newMatch.away.player,playedGames);
+    };
+
     $scope.selectTournament = function(tournament){    	
-    	$scope.pageData.selectedTournament = tournament;    	
+    	$scope.pageData.selectedTournament = tournament;  
+      $scope.pageData.faceToFaceMatches = [];
+      $scope.pageData.faceToFaceTable = [];
+      $scope.pageData.newMatch = {};  	
     	getTournamentPlayers($scope.pageData.selectedTournament.objectId);
     	getTournamentMatches($scope.pageData.selectedTournament.objectId);
     };
@@ -137,13 +174,23 @@ angular.module('vestaParkingApp')
     	$scope.pageData.selectedLeague = $scope.pageData.leaguesByCountry[country][0];
     	$scope.pageData.selectTeam = null;
     	getTeams($scope.pageData.selectedLeague.objectId);
-    }
+    };
 
     $scope.selectLeague = function(league){
     	$scope.pageData.selectedLeague = league;
     	$scope.pageData.selectTeam = null;
     	getTeams(league.objectId);
-    }
+    };
+
+    $scope.selectHome = function(item){
+      $scope.pageData.newMatch.home = item;
+      getPlayedGames();
+    };
+
+    $scope.selectAway = function(item){
+      $scope.pageData.newMatch.away = item;
+      getPlayedGames();
+    };
 
     $scope.addPlayer = function(){
     	Fifa.createUserTournament($scope.pageData.selectedTournament.objectId,$scope.pageData.newPlayer.selectedUser.objectId,$scope.pageData.selectedTeam.objectId);
@@ -184,15 +231,16 @@ angular.module('vestaParkingApp')
       return Math.ceil($scope.pageData.tournamentMatches.length/$scope.pageSize);                
     };
 
-    $scope.matchFilter = function(item){
-    	var result = [];    	
-    	angular.forEach($scope.pageData.tournamentMatches,function(match){
+    $scope.matchFilter = function(item,matchArray){
+    	var result = [];    
+      var matchArray = 	matchArray ? matchArray : $scope.pageData.tournamentMatches;
+    	angular.forEach(matchArray,function(match){
     		if(match.home.objectId === item.objectId || match.away.objectId === item.objectId || match.home.objectId === item.objectId || match.away.objectId === item.objectId){
     			result.push(match);
     		}
     	});
-    	$scope.pageData.tournamentMatches = result;
-    	$scope.currentPage = 0;
+      $scope.currentPage = 0;
+    	return result;
     };
 
     $scope.clearFilters = function(){

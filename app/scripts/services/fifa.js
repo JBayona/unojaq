@@ -31,11 +31,16 @@ angular.module('vestaParkingApp')
 
 		this.getTournamentPlayers = function(tournamentId){
 			return Proxy.getCall('https://api.parse.com/1/classes/fifa_tournament_player?include=player,team&where={"tournament":{"__type":"Pointer","className":"fifa_tournament","objectId":"'+tournamentId+'"}}',{});
-		}
+		};
 
 		this.getTournamentMatches = function(tournamentId){
 			return Proxy.getCall('https://api.parse.com/1/classes/fifa_tournament_match?limit=500&include=home,away&where={"tournament":{"__type":"Pointer","className":"fifa_tournament","objectId":"'+tournamentId+'"}}',{});
-		}
+		};
+
+		this.getPlayerMatches = function(player1,player2){
+			console.log(player1 +' vs '+player2);
+			return Proxy.getCall('https://api.parse.com/1/classes/fifa_tournament_match?limit=500&include=home,away&where={"$or":[{"home":{"__type":"Pointer","className":"_User","objectId":"'+player1+'"},"away":{"__type":"Pointer","className":"_User","objectId":"'+player2+'"}},{"home":{"__type":"Pointer","className":"_User","objectId":"'+player2+'"},"away":{"__type":"Pointer","className":"_User","objectId":"'+player1+'"}}]}',{});
+		};
 
 		this.updateMatchScore = function(objectId,field,value){
 			var data = {};

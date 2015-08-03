@@ -113,8 +113,9 @@
 	    </div>
 	    <div id="matchesContent" class="collapse in">
 	      <div class="panel-body">
-	      	<div class="well" ng-show="session.fifa_manager">
-	      		<h4>New match</h4>
+	      	<div class="well">
+	      		<h4 ng-show="session.fifa_manager">New match</h4>
+	      		<h4 ng-hide="session.fifa_manager">Face to face</h4>
 		        <div class="row">        	
 		        	<div class="col-md-2">			
 								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -122,13 +123,13 @@
 								<span ng-hide="pageData.newMatch.home">Select home team</span>
 								<b class="caret"></b><div class="ripple-wrapper"></div></a>
 								<ul class="dropdown-menu">
-					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="pageData.newMatch.home = item"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}}</a></li>
+					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="selectHome(item)"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}}</a></li>
 					      </ul>
 							</div>
-							<div class="col-md-1" ng-show="pageData.newMatch.home && pageData.newMatch.away">
+							<div class="col-md-1" ng-show="pageData.newMatch.home && pageData.newMatch.away && session.fifa_manager">
 								<input type="text" class="form-control floating-label" placeholder="score" ng-model="pageData.newMatch.homeScore">
 							</div>
-							<div class="col-md-1" ng-show="pageData.newMatch.home && pageData.newMatch.away">
+							<div class="col-md-1" ng-show="pageData.newMatch.home && pageData.newMatch.away && session.fifa_manager">
 								<input type="text" class="form-control floating-label" placeholder="score" ng-model="pageData.newMatch.awayScore">
 							</div>
 							<div class="col-md-2">			
@@ -137,24 +138,24 @@
 								<span ng-hide="pageData.newMatch.away">Select away team</span>
 								<b class="caret"></b><div class="ripple-wrapper"></div></a>
 								<ul class="dropdown-menu">
-					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="pageData.newMatch.away = item"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}}</a></li>
+					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="selectAway(item)"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}}</a></li>
 					      </ul>
 							</div>
-							<div class="col-md-2" ng-show="pageData.selectedTournament.wildcard">								
+							<div class="col-md-2" ng-show="pageData.selectedTournament.wildcard && session.fifa_manager">								
 								<div class="">
                     <label>
                       <input type="checkbox" ng-model="pageData.newMatch.wildcard"> Wildcard
                     </label>
                 </div>																	
 							</div>
-							<div class="col-md-2">								
+							<div class="col-md-2" ng-show="session.fifa_manager">								
 								<div ng-hide="pageData.newMatch.wildcard || !pageData.selectedTournament.playoffs">
                     <label>
                       <input type="checkbox" ng-model="pageData.newMatch.playoffs" ng-change="pageData.newMatch.selectedRound = null"> Playoffs
                     </label>
                 </div>																	
 							</div>
-							<div class="col-md-2" ng-show="pageData.newMatch.playoffs">
+							<div class="col-md-2" ng-show="pageData.newMatch.playoffs && session.fifa_manager">
 								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
 								<span ng-show="pageData.newMatch.round">{{pageData.newMatch.round}}</span>
 								<span ng-hide="pageData.newMatch.round">Select round</span>
@@ -179,7 +180,7 @@
 							</div>
 												
 		        </div>
-		        <div class="row" ng-show="(pageData.newMatch.playoffs || pageData.newMatch.wildcard) && pageData.newMatch.homeScore === pageData.newMatch.awayScore">
+		        <div class="row" ng-show="(pageData.newMatch.playoffs || pageData.newMatch.wildcard) && session.fifa_manager">
 		        	<div class="col-md-2">
 		        		<b>Penalties</b>
 		        	</div>
@@ -191,11 +192,83 @@
 			        </div>
 		        </div>
 		        
-		        <div class="row">
+		        <div class="row" ng-show="session.fifa_manager">
 		        	<div class="col-md-2">
 								<button type="button" class="btn btn-primary" ng-hide="!pageData.newMatch.home ||
 								!pageData.newMatch.away || !pageData.newMatch.homeScore || !pageData.newMatch.awayScore" ng-click="addMatch()">Add match</button>
 							</div>
+		        </div>
+		        <div class="row" ng-show="pageData.newMatch.home && pageData.newMatch.away">
+		        	<hr>
+		        	<div class="col-md-12">
+		        		<b>Current tournament</b>
+		        	</div>
+		        	<div class="col-md-6" ng-repeat="item in pageData.newMatch.playedGames">
+		        		<a href="javascript:void(0)">
+	          		<img 
+	          		ng-show="pageData.teamByPlayer[item.home.objectId].image" 
+	          		class="fifa-xs-logo" 
+	          		ng-src="{{pageData.teamByPlayer[item.home.objectId].image}}"
+	          		>
+	          		{{pageData.teamByPlayer[item.home.objectId].name}}</a>
+	          		<span>&nbsp;{{item.home_score}} - {{item.away_score}}</span>
+	          		<a href="javascript:void(0)">
+	          		<img 
+	          		ng-show="pageData.teamByPlayer[item.away.objectId].image" 
+	          		class="fifa-xs-logo" 
+	          		ng-src="{{pageData.teamByPlayer[item.away.objectId].image}}"
+	          		>{{pageData.teamByPlayer[item.away.objectId].name}}</a>
+		        	</div>
+		        	<div class="col-md-12">
+		        		<hr>
+		        		<b>Face to face</b>
+		        	</div>
+		        	<div class="col-md-12">
+								<div class="table-responsive">
+						      <table class="table table-hover">
+						        <thead>
+						          <tr>      					          	 
+						            <th>Player</th>					           
+						            <th>P</th>					            
+						            <th>W</th>
+						            <th>D</th>
+						            <th>L</th>
+						            <th>F</th>
+						            <th>A</th>
+						            <th>GD</th>
+						          </tr>
+						        </thead>
+						        <tbody>
+						          <tr ng-repeat="item in pageData.faceToFaceTable">
+						          	<td>					          		
+						          		{{item.player.first_name}} {{item.player.last_name}}
+						          	</td>
+						          	<td>
+						          		{{item.played}}
+						          	</td>
+						          	<td>
+						          		{{item.win}}
+						          	</td>
+						          	<td>
+						          		{{item.draw}}
+						          	</td>
+						          	<td>
+						          		{{item.lost}}
+						          	</td>
+						          	<td>
+						          		{{item.scored}}
+						          	</td>
+						          	<td>
+						          		{{item.received}}
+						          	</td>
+						          	<td>
+						          		{{item.diff}}
+						          	</td>
+						          </tr>
+						        </tbody>
+						      </table>  
+						    </div>
+						</div>
 		        </div>
 	      	</div>
 	      	<div class="row" ng-show="pageData.selectedTournament.playoffs">	 
@@ -343,7 +416,7 @@
 					        <tbody>
 					          <tr ng-repeat="item in pageData.tournamentMatches | startFrom:currentPage*pageSize | limitTo:pageSize" ng-class="{'me':item.home.objectId === session.objectId || item.away.objectId === session.objectId}" ng-hide="item.wildcard || item.playoffs">
 					          	<td>
-					          		<a ng-class="{'winner':item.home_score > item.away_score}" href="javascript:void(0)" ng-click="matchFilter(item.home)">
+					          		<a ng-class="{'winner':item.home_score > item.away_score}" href="javascript:void(0)" ng-click="pageData.tournamentMatches = matchFilter(item.home)">
 					          		<img 
 					          		ng-show="pageData.teamByPlayer[item.home.objectId].image" 
 					          		class="fifa-xs-logo" 
@@ -360,7 +433,7 @@
 					          		<a ng-hide="item.edit && session.fifa_manager" href="javascript:void(0)" ng-click="item.edit = true">{{item.away_score}}</a>
 					          	</td>
 					          	<td>
-					          		<a ng-class="{'winner':item.home_score < item.away_score}" href="javascript:void(0)" ng-click="matchFilter(item.away)"> 
+					          		<a ng-class="{'winner':item.home_score < item.away_score}" href="javascript:void(0)" ng-click="pageData.tournamentMatches = matchFilter(item.away)"> 
 					          		<img 
 					          		ng-show="pageData.teamByPlayer[item.away.objectId].image" 
 					          		class="fifa-xs-logo" 
@@ -425,11 +498,11 @@
 					          <tr ng-repeat="item in pageData.tableArray" ng-class="{'me':item.player === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
 					          	<td>					          		
 					          		<img 
-					          		ng-show="pageData.teamByPlayer[item.player].image" 
+					          		ng-show="pageData.teamByPlayer[item.player.objectId].image" 
 					          		class="fifa-xs-logo" 
-					          		ng-src="{{pageData.teamByPlayer[item.player].image}}"
+					          		ng-src="{{pageData.teamByPlayer[item.player.objectId].image}}"
 					          		>
-					          		{{pageData.teamByPlayer[item.player].name}}
+					          		{{pageData.teamByPlayer[item.player.objectId].name}}
 					          	</td>
 					          	<td>
 					          		{{item.played}}
