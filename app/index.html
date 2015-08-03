@@ -37,7 +37,14 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar" ng-init="activeMenu = 'parking'">
           <ul class="nav navbar-nav navbar-right">
-            <li ng-show="session" ng-class="{'active':activeMenu === '/fifa'}"><a href="#/fifa"><i class="mdi-toggle-radio-button-on"></i> Fifa</a></li>
+            <li ng-show="session" class="dropdown" ng-class="{'active':activeMenu === '/fifa'}">
+              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-av-games"></i>Fifa<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#/fifa">Catalog</a></li>
+                <li><a href="#/tournaments">Tournaments</a></li>
+              </ul>
+            </li>
+            </li>
             <li ng-show="session" ng-class="{'active':activeMenu === '/donuts'}"><a href="#/donuts"><i class="mdi-toggle-radio-button-on"></i> Donuts</a></li>
             <li ng-show="session" ng-class="{'active':activeMenu === '/main'}"><a href="#/main"><i class="mdi-notification-event-available"></i> Calendar</a></li>
             <li ng-show="session" class="dropdown">
@@ -122,6 +129,8 @@
         <script src="scripts/services/parking.js"></script>
         <script src="scripts/services/fifa.js"></script>
         <script src="scripts/controllers/fifa.js"></script>
+        <script src="scripts/controllers/tournaments.js"></script>
+        <script src="scripts/filters/startfrom.js"></script>
         <!-- endbuild -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>

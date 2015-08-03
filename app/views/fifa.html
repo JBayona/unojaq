@@ -1,1 +1,34 @@
-<p>This is the fifa view.</p>
+<div class="well">
+	<div class="row">
+		<div class="col-md-2">			
+			<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+			<span ng-show="pageData.selectedCountry">{{pageData.selectedCountry}}</span>
+			<span ng-hide="pageData.selectedCountry">Select country</span>
+			<b class="caret"></b><div class="ripple-wrapper"></div></a>
+			<ul class="dropdown-menu">
+	      <li ng-repeat="(key,value) in pageData.leaguesByCountry"><a href="javascript:void(0)" ng-click="selectCountry(key)">
+	      	{{key}}
+	      </a></li>
+	    </ul>
+		</div>
+		<div class="col-md-4">			
+			<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+			<span ng-show="pageData.selectedLeague"><img ng-show="pageData.selectedLeague.image" class="fifa-logo" ng-src="{{pageData.selectedLeague.image}}">{{pageData.selectedLeague.name}}</span>
+			<span ng-hide="pageData.selectedLeague">Select a league</span>
+			<b class="caret"></b><div class="ripple-wrapper"></div></a>
+			<ul class="dropdown-menu">
+	      <li ng-repeat="league in pageData.leaguesByCountry[pageData.selectedCountry]"><a href="javascript:void(0)" ng-click="selectLeague(league)">
+	      	<img ng-show="league.image" class="fifa-logo" ng-src="{{league.image}}">{{league.name}}
+	      </a></li>
+	    </ul>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-2" ng-repeat="team in pageData.teams">
+		<a href="javascript:void(0)">
+	    <img ng-show="team.image" class="fifa-logo" ng-src="{{team.image}}">{{team.name}}
+	  </a>
+	</div>
+</div>
+

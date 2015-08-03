@@ -33,6 +33,10 @@ angular
         templateUrl: 'views/fifa.html',
         controller: 'FifaCtrl',
         auth: true
+      }).when('/tournaments', {
+        templateUrl: 'views/tournaments.html',
+        controller: 'TournamentsCtrl',
+        auth: true
       }).otherwise({
         redirectTo: '/'
       });
@@ -53,6 +57,9 @@ angular
     //Prevent unauthorized access
     $rootScope.$on('$routeChangeStart', function (event, next) {
         $rootScope.activeMenu = $location.url();
+        if($location.url() === '/tournaments'){
+          $rootScope.activeMenu = '/fifa'
+        }
         if($location.url() === '/login'){
           return;
         }

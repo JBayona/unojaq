@@ -23,7 +23,6 @@ angular.module('login')
               Session.setAttribute(key,value);  
             }            
           });
-          console.log($rootScope.session);
           Session.saveSession();
           $location.path('/main');
         });        
