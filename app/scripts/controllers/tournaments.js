@@ -216,7 +216,7 @@ angular.module('vestaParkingApp')
     		$scope.pageData.newMatch.awayPenalties,
     		$scope.pageData.newMatch.round
     		);
-    	//$scope.pageData.newMatch = {};
+    	$scope.pageData.newMatch = {};
     	getTournamentMatches($scope.pageData.selectedTournament.objectId);
     };
 
@@ -252,10 +252,12 @@ angular.module('vestaParkingApp')
     		return;
     	}
     	if(round === 4){
-    		return 'Quarter final';
+    		return 'Quarter-final';
     	}else if(round === 2){
-    		return 'Semifinal';
-    	} else if(round === 1){
+    		return 'Semi-final';
+    	}else if(round === 3){
+        return '3rd place';
+      }else if(round === 1){
     		return 'Final';
     	}else{
     		return round;

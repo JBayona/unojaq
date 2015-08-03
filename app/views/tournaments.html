@@ -162,19 +162,22 @@
 								<b class="caret"></b><div class="ripple-wrapper"></div></a>
 								<ul class="dropdown-menu">
 					        <li>
-					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 16">16</a>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 16">16th-finals</a>
 					        </li>
 					        <li>
-					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 8">8</a>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 8">8th-finals</a>
 					        </li>
 					        <li>
-					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 4">4</a>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 4">Quarter-finals</a>
 					        </li>
 					        <li>
-					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 2">2</a>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 3">Third place</a>
 					        </li>
 					        <li>
-					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 1">1</a>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 2">Semi-finals</a>
+					        </li>
+					        <li>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 1">Final</a>
 					        </li>
 					      </ul>
 							</div>
@@ -204,6 +207,8 @@
 		        		<b>Current tournament</b>
 		        	</div>
 		        	<div class="col-md-6" ng-repeat="item in pageData.newMatch.playedGames">
+		        		<span ng-show="item.wildcard">(W)</span>
+		        		<span ng-show="item.playoffs">(P)</span>
 		        		<a href="javascript:void(0)">
 	          		<img 
 	          		ng-show="pageData.teamByPlayer[item.home.objectId].image" 
@@ -495,7 +500,7 @@
 					          </tr>
 					        </thead>
 					        <tbody>
-					          <tr ng-repeat="item in pageData.tableArray" ng-class="{'me':item.player === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
+					          <tr ng-repeat="item in pageData.tableArray" ng-class="{'me':item.player.objectId === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
 					          	<td>					          		
 					          		<img 
 					          		ng-show="pageData.teamByPlayer[item.player.objectId].image" 
