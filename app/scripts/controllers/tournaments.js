@@ -216,7 +216,6 @@ angular.module('vestaParkingApp')
     		$scope.pageData.newMatch.awayPenalties,
     		$scope.pageData.newMatch.round
     		);
-    	$scope.pageData.newMatch = {};
     	getTournamentMatches($scope.pageData.selectedTournament.objectId);
     };
 
