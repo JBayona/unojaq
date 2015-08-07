@@ -8,7 +8,7 @@
  * Controller of the vestaParkingApp
  */
 angular.module('vestaParkingApp')
-  .controller('MainCtrl', ['$scope','Current','Events','$rootScope','$q','$timeout','Mailgun','LoginService','Parking',function ($scope,Current,Events,$rootScope,$q,$timeout,Mailgun,LoginService,Parking) {
+  .controller('MainCtrl', ['$scope','Current','Events','$rootScope','$q','$timeout','Mailgun','LoginService','Parking','Session',function ($scope,Current,Events,$rootScope,$q,$timeout,Mailgun,LoginService,Parking,Session) {
     //These variables MUST be set as a minimum for the calendar to work
     $scope.calendarView = 'month';
     $scope.calendarDay = new Date();
@@ -20,10 +20,25 @@ angular.module('vestaParkingApp')
     $scope.tokens = 0;
     var dateDisableDeferred =  $q.defer();
   	$scope.dateDisablePromise = dateDisableDeferred.promise;
-    var setNextTurn = function(){
+    var getParkingInfo = function(callback){
+      Parking.getParkingInfo($rootScope.session.objectId).then(function(response){          
+        angular.forEach(response.results[0],function(value,key){
+          if(key === 'objectId'){
+            Session.setAttribute('parkingId',value);
+          }else{
+            Session.setAttribute(key,value);  
+          }            
+        });
+        Session.saveSession();
+        if(callback){
+          getCurrent($rootScope.session,callback);
+        }
+      });
+    };
+    var setNextTurn = function(user){
       Current.getTotalUsers().then(function(response){
-        if($rootScope.session.turn < response.count){
-          Current.updateTurn($rootScope.session.turn+1).then(function(){
+        if(user.turn < response.count){
+          Current.updateTurn(user.turn+1).then(function(){
             getCurrent();
           });
         }else{
@@ -32,23 +47,29 @@ angular.module('vestaParkingApp')
         Current.updateTokens(3);
       });
     }
-  	var getCurrent = function(){
+  	var getCurrent = function(user,callback){
+      var user = user ? user : $rootScope.session;
   		Current.getCurrent().then(function(response){
-	    	if(response.results[0].turn === $rootScope.session.turn){
+	    	if(response.results[0].turn === user.turn){
 	    		$scope.tokens = response.results[0].tokens;
-          if($rootScope.session.tokens){
-            $scope.tokens += $rootScope.session.tokens;
-            Current.updateUserTokens(0,$rootScope.session.parkingId);
+          if(user.tokens){
+            $scope.tokens += user.tokens;
+            Current.updateUserTokens(0,user.parkingId);
             if($scope.tokens <= 0){
-              setNextTurn();
+              setNextTurn(user);
             }else{
               Current.updateTokens($scope.tokens);  
             }            
           }
-	    	}
+	    	}else{
+          $scope.tokens = 0;
+        }
 	    	Current.getCurrentUser(response.results[0].turn).then(function(response){
 	    		$scope.currentUser = response.results[0].user;
 	    	});
+        if(callback){
+          callback();
+        }
 	    });
   	};
     
@@ -99,7 +120,9 @@ angular.module('vestaParkingApp')
               angular.forEach($scope.users,function(user){
                 if(user.objectId === response.results[0].user.objectId){
                   user.tokens = response.results[0].tokens;    
-                  user.fixed = response.results[0].fixed;                
+                  user.fixed = response.results[0].fixed;   
+                  user.parkingId = response.results[0].objectId;
+                  user.turn = response.results[0].turn;
                 }
               });                         
             });  
@@ -181,28 +204,33 @@ angular.module('vestaParkingApp')
       endDate = endDate.replace(/-|:|\.\d+/g, '');      
       window.open('https://www.google.com/calendar/render?action=TEMPLATE&text=Jacarandas%20Parking&dates='+startDate+'/'+endDate+'&details=Jacarandas%20parking%20turn&location=Jacarandas%20office&sprop=&sprop=name:#eventpage_6');      
     };
-    
-    $scope.addEvent = function(userId){
+    var addEvent = function(userId){
+      if($scope.tokens < 1){
+        return;
+      }
       userId = userId ? userId : $rootScope.session.objectId;
-    	$scope.tokens--;
-    	var item = {};
-    	item.user = item.user={'__type':'Pointer','className':'_User','objectId':userId};
-    	item.startsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(9).toISOString()};
-    	item.endsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(18).toISOString()};
-    	item.type = 'info';
-    	Events.createEvent(item).then(function(){
-    		$scope.addedConfirmation = true;
-    		$timeout(function(){
+      $scope.tokens--;
+      var item = {};
+      item.user = item.user={'__type':'Pointer','className':'_User','objectId':userId};
+      item.startsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(9).toISOString()};
+      item.endsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(18).toISOString()};
+      item.type = 'info';
+      Events.createEvent(item).then(function(){
+        $scope.addedConfirmation = true;
+        $timeout(function(){
             $scope.addedConfirmation = false;
-         	},2000);
-    		getEvents();
-    		$scope.newEvent = {};
-    		if($scope.tokens === 0){
-    			setNextTurn();
-    		}else{
-    			Current.updateTokens($scope.tokens);
-    		}
-    	});
+          },2000);
+        getEvents();
+        $scope.newEvent = {};
+        if($scope.tokens === 0){
+          setNextTurn($rootScope.session);
+        }else{
+          Current.updateTokens($scope.tokens);
+        }
+      });
+    };
+    $scope.addEvent = function(userId){
+      getParkingInfo(addEvent);
     };
 
     $scope.disabled = function(date, mode) {
@@ -235,7 +263,7 @@ angular.module('vestaParkingApp')
     }
 
 	  $scope.openGarage = function(){
-      sendEmail($rootScope.session.email,'erik.villa@unosquare.com','Garage open request','Please open the garage',
+      sendEmail($rootScope.session.email,'jennifer.hernand@unosquare.com','Garage open request','Please open the garage',
         function(response){
         $scope.emailSent = true;
         $scope.emailSentConfirmation = true;
@@ -275,4 +303,5 @@ angular.module('vestaParkingApp')
     }
     getCurrent();
     getEvents();
+    getParkingInfo();
   }]);

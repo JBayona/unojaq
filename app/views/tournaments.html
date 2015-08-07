@@ -47,7 +47,7 @@
 						      </a></li>
 						    </ul>
 							</div>
-							<div class="col-md-4">			
+							<div class="col-md-3">			
 								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
 								<span ng-show="pageData.selectedLeague"><img ng-show="pageData.selectedLeague.image" class="fifa-logo" ng-src="{{pageData.selectedLeague.image}}">{{pageData.selectedLeague.name}}</span>
 								<span ng-hide="pageData.selectedLeague">Select a league</span>
@@ -58,7 +58,7 @@
 						      </a></li>
 						    </ul>
 							</div>
-							<div class="col-md-4">			
+							<div class="col-md-3">			
 								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
 								<span ng-show="pageData.selectedTeam"><img ng-show="pageData.selectedTeam.image" class="fifa-logo" ng-src="{{pageData.selectedTeam.image}}">{{pageData.selectedTeam.name}}</span>
 								<span ng-hide="pageData.selectedTeam">Select a team</span>
@@ -68,8 +68,23 @@
 						      	<img ng-show="team.image" class="fifa-logo" ng-src="{{team.image}}">{{team.name}}
 						      </a></li>
 						    </ul>
-							</div>						
+							</div>			
+							<div class="col-md-2" ng-show="pageData.selectedTournament.groups">
+								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span ng-show="pageData.selectedGroup">{{pageData.selectedGroup}}</span>
+								<span ng-hide="pageData.selectedGroup">Select group</span>
+								<b class="caret"></b><div class="ripple-wrapper"></div></a>
+								<ul class="dropdown-menu">
+					        <li>
+					        	<a href="javascript:void(0)" ng-click="pageData.selectedGroup = 'A'">A</a>
+					        </li>
+					        <li>
+					        	<a href="javascript:void(0)" ng-click="pageData.selectedGroup = 'B'">B</a>
+					        </li>
+					      </ul>
+							</div>			
 		        </div>
+		        
 		        <div class="row">
 	        	<div class="col-md-2">
 							<button type="button" class="btn btn-primary" ng-hide="!pageData.newPlayer.selectedUser ||
@@ -85,13 +100,15 @@
 					        <thead>
 					          <tr>      					          	 
 					            <th>Player</th>					           
-					            <th>Team</th>					            
+					            <th>Team</th>	
+					            <th ng-show="pageData.selectedTournament.groups">Group</th>					            
 					          </tr>
 					        </thead>
 					        <tbody>
 					          <tr ng-repeat="item in pageData.tournamentPlayers" ng-class="{'me':item.player.objectId === session.objectId}">
 					          	<td>{{item.player.first_name}} {{item.player.last_name}}</td>
 					          	<td><img ng-show="item.team.image" class="fifa-md-logo" ng-src="{{item.team.image}}"> {{item.team.name}}</td>
+					          	<td ng-show="pageData.selectedTournament.groups">{{item.group}}</td>
 					          </tr>
 					        </tbody>
 					      </table>  
@@ -171,7 +188,7 @@
 					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 4">Quarter-finals</a>
 					        </li>
 					        <li>
-					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 3">Third place</a>
+					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 1.5">Third place</a>
 					        </li>
 					        <li>
 					        	<a href="javascript:void(0)" ng-click="pageData.newMatch.round = 2">Semi-finals</a>

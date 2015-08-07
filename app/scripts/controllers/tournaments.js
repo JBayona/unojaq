@@ -193,11 +193,12 @@ angular.module('vestaParkingApp')
     };
 
     $scope.addPlayer = function(){
-    	Fifa.createUserTournament($scope.pageData.selectedTournament.objectId,$scope.pageData.newPlayer.selectedUser.objectId,$scope.pageData.selectedTeam.objectId);
+    	Fifa.createUserTournament($scope.pageData.selectedTournament.objectId,$scope.pageData.newPlayer.selectedUser.objectId,$scope.pageData.selectedTeam.objectId,$scope.pageData.selectedGroup);
     	$scope.pageData.newPlayer = {};
     	$scope.pageData.selectedCountry = null;
     	$scope.pageData.selectedLeague = null;
     	$scope.pageData.selectedTeam = null;
+        $scope.pageData.selectedGroup = null;
     	$scope.pageData.teams = {};
     	getTournamentPlayers($scope.pageData.selectedTournament.objectId);
 
@@ -255,7 +256,7 @@ angular.module('vestaParkingApp')
     		return 'Quarter-final';
     	}else if(round === 2){
     		return 'Semi-final';
-    	}else if(round === 3){
+    	}else if(round === 1.5){
         return '3rd place';
       }else if(round === 1){
     		return 'Final';
