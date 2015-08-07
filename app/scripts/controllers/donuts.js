@@ -14,27 +14,43 @@ angular.module('vestaParkingApp')
 
     var getEvents = function(){
     	var paymentDate = undefined;
+      var paymentDateOffsite = undefined;
     	var paymentDateCounter = 0;
+      var paymentDateCounterOffsite = 0;
     	if(moment().day(2).isBefore(moment())){
     		paymentDate = moment().day(2).add(7,'day');
+        paymentDateOffsite = moment().day(2).add(7,'day');
     	}else{
     		paymentDate = moment().day(2);
+        paymentDateOffsite = moment().day(2);
     	}
     	Donuts.getEvents().then(function(response){
-    		$scope.pageData.events = response.results;
+        $scope.pageData.onsiteEvents = [];
+        $scope.pageData.offsiteEvents = [];
         $scope.pageData.donutsByUser = {};
-    		angular.forEach($scope.pageData.events,function(donutEvent){
+    		angular.forEach(response.results,function(donutEvent){
     			if($scope.pageData.donutsByUser[donutEvent.user.objectId]){
     				$scope.pageData.donutsByUser[donutEvent.user.objectId] = $scope.pageData.donutsByUser[donutEvent.user.objectId] +1;
     			}else{
     				$scope.pageData.donutsByUser[donutEvent.user.objectId] = 1;	
     			}
-    			donutEvent.paymentDate = paymentDate.toISOString();
-    			paymentDateCounter++;
-    			if(paymentDateCounter === 2){
-    				paymentDate.add(7,'day');
-    				paymentDateCounter = 0;
-    			}
+    			donutEvent.paymentDate = donutEvent.user.onsite ? paymentDate.toISOString() : paymentDateOffsite.toISOString();
+    			if(donutEvent.user.onsite){
+            paymentDateCounter++;
+            if(paymentDateCounter === 2){
+              paymentDate.add(7,'day');
+              paymentDateCounter = 0;
+            }  
+            $scope.pageData.onsiteEvents.push(donutEvent);
+          }else{
+            paymentDateCounterOffsite++;
+            if(paymentDateCounterOffsite === 2){
+              paymentDateOffsite.add(7,'day');
+              paymentDateCounterOffsite = 0;
+            } 
+            $scope.pageData.offsiteEvents.push(donutEvent);
+          }
+          
     		});
     	});
     }

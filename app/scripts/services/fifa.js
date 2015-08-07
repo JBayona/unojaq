@@ -48,11 +48,12 @@ angular.module('vestaParkingApp')
 			return Proxy.putCall(data,'https://api.parse.com/1/classes/fifa_tournament_match/'+objectId);
 		};
 
-		this.createUserTournament = function(tournamentId,playerId,teamId){
+		this.createUserTournament = function(tournamentId,playerId,teamId,group){
 			var item = {
 				player:{'__type':'Pointer','className':'_User','objectId':playerId},
 				tournament:{'__type':'Pointer','className':'fifa_tournament','objectId':tournamentId},
-				team:{'__type':'Pointer','className':'fifa_teams','objectId':teamId}
+				team:{'__type':'Pointer','className':'fifa_teams','objectId':teamId},
+				group: group ? group : null
 			};
 			return Proxy.postCall(item,'https://api.parse.com/1/classes/fifa_tournament_player');
 		};
@@ -67,7 +68,7 @@ angular.module('vestaParkingApp')
 				playoffs: playoffs ? playoffs : false,
 				home_penalties: homePenalties ? parseInt(homePenalties) : null,
 				away_penalties: awayPenalties ? parseInt(awayPenalties) : null,
-				round: round ? parseInt(round) : null
+				round: round ? parseFloat(round) : null
 			};
 			return Proxy.postCall(item,'https://api.parse.com/1/classes/fifa_tournament_match');
 		};
