@@ -263,7 +263,7 @@ angular.module('vestaParkingApp')
     }
 
 	  $scope.openGarage = function(){
-      sendEmail($rootScope.session.email,'jennifer.hernand@unosquare.com','Garage open request','Please open the garage',
+      sendEmail($rootScope.session.email,'jenni.hernand@unosquare.com,cesar.hernandez@unosquare.com','Garage open request','Please open the garage',
         function(response){
         $scope.emailSent = true;
         $scope.emailSentConfirmation = true;
@@ -274,7 +274,7 @@ angular.module('vestaParkingApp')
 	  };
 
 	  $scope.openGarageVisible = function(){
-	  	return $scope.myEvents.indexOf(moment().hour(0).minutes(0).seconds(0).milliseconds(0).toISOString()) !==-1 && !$rootScope.session.fixed;
+	  	return $scope.myEvents.indexOf(moment().hour(0).minutes(0).seconds(0).milliseconds(0).toISOString()) !==-1;
 	  };
 
     $scope.eventClicked = function(event) {
