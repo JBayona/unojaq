@@ -29,9 +29,12 @@ angular.module('vestaParkingApp')
     	Fifa.getTournamentPlayers(tournamentId).then(function(response){
     		$scope.pageData.tournamentPlayers = response.results;
     		$scope.pageData.teamByPlayer = {};
+        $scope.pageData.tournamentGroups = {};
     		angular.forEach(response.results,function(item){
     			$scope.pageData.teamByPlayer[item.player.objectId] = item.team;	
+          $scope.pageData.tournamentGroups[item.group] = item.group;
     		});
+        getTournamentMatches(tournamentId);
     	});
     };
 
@@ -49,25 +52,32 @@ angular.module('vestaParkingApp')
 
     var getTable = function(matchArray,outputArray,includeWildCardAndPlayoffs){
     	var table = {};
-      matchArray = matchArray ? matchArray : $scope.pageData.tournamentMatches;
       if(!outputArray){
         $scope.pageData.tableArray = [];
       };
+      matchArray = matchArray ? matchArray : $scope.pageData.tournamentMatches;
       outputArray = outputArray ? outputArray : $scope.pageData.tableArray;
       includeWildCardAndPlayoffs = includeWildCardAndPlayoffs ? includeWildCardAndPlayoffs : false;
+      if(!includeWildCardAndPlayoffs){
+        angular.forEach($scope.pageData.tournamentPlayers, function(item){
+          table[item.player.objectId] = getEmptyTableRow();
+          table[item.player.objectId].group = item.group;
+          table[item.player.objectId].player = item.player;
+        });  
+      }
     	angular.forEach(matchArray,function(match){
     		if(!includeWildCardAndPlayoffs && (match.wildcard || match.playoffs)){
     			return;
     		}
     		//add points
-    		if(!table[match.home.objectId]){
-    			table[match.home.objectId] = getEmptyTableRow();
-    			table[match.home.objectId].player = match.home;
-    		}
-    		if(!table[match.away.objectId]){
-    			table[match.away.objectId] = getEmptyTableRow();
-    			table[match.away.objectId].player = match.away;
-    		}
+        if(!table[match.home.objectId]){
+          table[match.home.objectId] = getEmptyTableRow();
+          table[match.home.objectId].player = match.home;
+        }
+        if(!table[match.away.objectId]){
+          table[match.away.objectId] = getEmptyTableRow();
+          table[match.away.objectId].player = match.away;
+        }
     		if(match.home_score === match.away_score){
           if(match.home_penalties && match.away_penalties && match.home_penalties > match.away_penalties){
             table[match.home.objectId].points += 3;   
@@ -166,14 +176,15 @@ angular.module('vestaParkingApp')
       $scope.pageData.newMatch.playedGames = $scope.matchFilter($scope.pageData.newMatch.away.player,playedGames);
     };
 
-    $scope.selectTournament = function(tournament){    	
+    $scope.selectTournament = function(tournament){    
+      $scope.pageData.tableArray = [];	
     	$scope.pageData.selectedTournament = tournament;  
       $scope.pageData.faceToFaceMatches = [];
       $scope.pageData.faceToFaceTable = [];
       $scope.pageData.newMatch = {};  	
       $scope.currentPage = 0;
     	getTournamentPlayers($scope.pageData.selectedTournament.objectId);
-    	getTournamentMatches($scope.pageData.selectedTournament.objectId);
+      angular.forEach
     };
     
     $scope.selectCountry = function(country){

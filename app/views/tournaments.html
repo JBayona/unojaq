@@ -534,8 +534,11 @@
 	      </h3>
 	    </div>
 	    <div id="tableContent" class="collapse in">
-	      <div class="panel-body">	      		       
-	        <div class="row">
+	      <div class="panel-body">	      
+	        <div class="row" ng-repeat="(key,value) in pageData.tournamentGroups">
+	        	<div class="col-md-12" ng-show="pageData.selectedTournament.groups">
+	        		Group {{key}}
+	        	</div>
 						<div class="col-md-12">
 							<div class="table-responsive">
 					      <table class="table table-hover">
@@ -553,14 +556,14 @@
 					          </tr>
 					        </thead>
 					        <tbody>
-					          <tr ng-repeat="item in pageData.tableArray" ng-class="{'me':item.player.objectId === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
+					          <tr ng-repeat="item in $parent.pageData.tableArray | filter:{'group':key}" ng-class="{'me':item.player.objectId === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
 					          	<td>					          		
 					          		<img 
-					          		ng-show="pageData.teamByPlayer[item.player.objectId].image" 
+					          		ng-show="$parent.pageData.teamByPlayer[item.player.objectId].image" 
 					          		class="fifa-xs-logo" 
-					          		ng-src="{{pageData.teamByPlayer[item.player.objectId].image}}"
+					          		ng-src="{{$parent.pageData.teamByPlayer[item.player.objectId].image}}"
 					          		>
-					          		{{pageData.teamByPlayer[item.player.objectId].name}}
+					          		{{$parent.pageData.teamByPlayer[item.player.objectId].name}}
 					          	</td>
 					          	<td>
 					          		{{item.played}}
