@@ -33,8 +33,16 @@ angular.module('vestaParkingApp')
 			return Proxy.getCall('https://api.parse.com/1/classes/fifa_tournament_player?include=player,team&where={"tournament":{"__type":"Pointer","className":"fifa_tournament","objectId":"'+tournamentId+'"}}',{});
 		};
 
+		this.deleteTournamentPlayer = function(objectId){
+			return Proxy.deleteCall({'objectId':objectId},'https://api.parse.com/1/classes/fifa_tournament_player/'+objectId);
+		};
+
 		this.getTournamentMatches = function(tournamentId){
-			return Proxy.getCall('https://api.parse.com/1/classes/fifa_tournament_match?limit=500&include=home,away&where={"tournament":{"__type":"Pointer","className":"fifa_tournament","objectId":"'+tournamentId+'"}}',{});
+			return Proxy.getCall('https://api.parse.com/1/classes/fifa_tournament_match?limit=500&order=-createdAt&include=home,away&where={"tournament":{"__type":"Pointer","className":"fifa_tournament","objectId":"'+tournamentId+'"}}',{});
+		};
+
+		this.deleteTournamentMatch = function(objectId){
+			return Proxy.deleteCall({'objectId':objectId},'https://api.parse.com/1/classes/fifa_tournament_match/'+objectId);
 		};
 
 		this.getPlayerMatches = function(player1,player2){

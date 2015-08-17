@@ -14,7 +14,7 @@ angular.module('vestaParkingApp')
     	if(!input){
     		return;
     	}
-        start = +start;
-        return input.slice(start);
+      start = +start;
+      return input.slice(start);
     }
   });

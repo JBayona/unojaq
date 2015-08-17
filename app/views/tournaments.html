@@ -109,6 +109,15 @@
 					          	<td>{{item.player.first_name}} {{item.player.last_name}}</td>
 					          	<td><img ng-show="item.team.image" class="fifa-md-logo" ng-src="{{item.team.image}}"> {{item.team.name}}</td>
 					          	<td ng-show="pageData.selectedTournament.groups">{{item.group}}</td>
+					          	<td ng-show="session.fifa_manager">
+			                <a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
+			                <i class="mdi-action-delete" ng-click="item.delete = true"></i>
+			                </a>
+				              <span ng-show="item.delete">
+				                <a href="javascript:void(0);" class="btn-link" ng-click="deletePlayer(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
+				                <a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
+				              </span>
+				              </td>
 					          </tr>
 					        </tbody>
 					      </table>  
@@ -136,11 +145,11 @@
 		        <div class="row">        	
 		        	<div class="col-md-2">			
 								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-								<span ng-show="pageData.newMatch.home"><img ng-show="pageData.newMatch.home.team.image" class="fifa-xs-logo" ng-src="{{pageData.newMatch.home.team.image}}">{{pageData.newMatch.home.team.name}}</span>
+								<span ng-show="pageData.newMatch.home"><img ng-show="pageData.newMatch.home.team.image" class="fifa-xs-logo" ng-src="{{pageData.newMatch.home.team.image}}">{{pageData.newMatch.home.team.name}} : {{pageData.newMatch.home.player.first_name}}</span>
 								<span ng-hide="pageData.newMatch.home">Select home team</span>
 								<b class="caret"></b><div class="ripple-wrapper"></div></a>
 								<ul class="dropdown-menu">
-					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="selectHome(item)"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}}</a></li>
+					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="selectHome(item)"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}} : {{item.player.first_name}}</a></li>
 					      </ul>
 							</div>
 							<div class="col-md-1" ng-show="pageData.newMatch.home && pageData.newMatch.away && session.fifa_manager">
@@ -151,11 +160,11 @@
 							</div>
 							<div class="col-md-2">			
 								<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-								<span ng-show="pageData.newMatch.away"><img ng-show="pageData.newMatch.away.team.image" class="fifa-xs-logo" ng-src="{{pageData.newMatch.away.team.image}}">{{pageData.newMatch.away.team.name}}</span>
+								<span ng-show="pageData.newMatch.away"><img ng-show="pageData.newMatch.away.team.image" class="fifa-xs-logo" ng-src="{{pageData.newMatch.away.team.image}}">{{pageData.newMatch.away.team.name}} : {{pageData.newMatch.away.player.first_name}}</span>
 								<span ng-hide="pageData.newMatch.away">Select away team</span>
 								<b class="caret"></b><div class="ripple-wrapper"></div></a>
 								<ul class="dropdown-menu">
-					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="selectAway(item)"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}}</a></li>
+					        <li ng-repeat="item in pageData.tournamentPlayers"><a href="javascript:void(0)" ng-click="selectAway(item)"><img ng-show="item.team.image" class="fifa-xs-logo" ng-src="{{item.team.image}}">{{item.team.name}} : {{item.player.first_name}}</a></li>
 					      </ul>
 							</div>
 							<div class="col-md-2" ng-show="pageData.selectedTournament.wildcard && session.fifa_manager">								
@@ -346,6 +355,15 @@
 					          		{{pageData.teamByPlayer[item.away.objectId].name}}</a>
 					          	</td>
 					          	<td>{{getRoundLabel(item.round)}}</td>
+					          	<td ng-show="session.fifa_manager">
+				                <a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
+				                <i class="mdi-action-delete" ng-click="item.delete = true"></i>
+				                </a>
+					              <span ng-show="item.delete">
+					                <a href="javascript:void(0);" class="btn-link" ng-click="deleteMatch(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
+					                <a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
+					              </span>
+				              </td>
 					          </tr>
 					        </tbody>
 					      </table>  					      
@@ -410,6 +428,15 @@
 					          		>
 					          		{{pageData.teamByPlayer[item.away.objectId].name}}</a>
 					          	</td>
+					          	<td ng-show="session.fifa_manager">
+				                <a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
+				                <i class="mdi-action-delete" ng-click="item.delete = true"></i>
+				                </a>
+					              <span ng-show="item.delete">
+					                <a href="javascript:void(0);" class="btn-link" ng-click="deleteMatch(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
+					                <a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
+					              </span>
+				              </td>
 					          </tr>
 					        </tbody>
 					      </table>  					      
@@ -436,9 +463,9 @@
 					          </tr>
 					        </thead>
 					        <tbody>
-					          <tr ng-repeat="item in pageData.tournamentMatches | startFrom:currentPage*pageSize | limitTo:pageSize" ng-class="{'me':item.home.objectId === session.objectId || item.away.objectId === session.objectId}" ng-hide="item.wildcard || item.playoffs">
+					          <tr ng-repeat="item in pageData.regularMatches | startFrom:currentPage*pageSize | limitTo:pageSize" ng-class="{'me':item.home.objectId === session.objectId || item.away.objectId === session.objectId}" ng-hide="item.wildcard || item.playoffs">
 					          	<td>
-					          		<a ng-class="{'winner':item.home_score > item.away_score}" href="javascript:void(0)" ng-click="pageData.tournamentMatches = matchFilter(item.home)">
+					          		<a ng-class="{'winner':item.home_score > item.away_score}" href="javascript:void(0)" ng-click="pageData.regularMatches = matchFilter(item.home)">
 					          		<img 
 					          		ng-show="pageData.teamByPlayer[item.home.objectId].image" 
 					          		class="fifa-xs-logo" 
@@ -455,7 +482,7 @@
 					          		<a ng-hide="item.edit && session.fifa_manager" href="javascript:void(0)" ng-click="item.edit = true">{{item.away_score}}</a>
 					          	</td>
 					          	<td>
-					          		<a ng-class="{'winner':item.home_score < item.away_score}" href="javascript:void(0)" ng-click="pageData.tournamentMatches = matchFilter(item.away)"> 
+					          		<a ng-class="{'winner':item.home_score < item.away_score}" href="javascript:void(0)" ng-click="pageData.regularMatches = matchFilter(item.away)"> 
 					          		<img 
 					          		ng-show="pageData.teamByPlayer[item.away.objectId].image" 
 					          		class="fifa-xs-logo" 
@@ -463,6 +490,15 @@
 					          		>
 					          		{{pageData.teamByPlayer[item.away.objectId].name}}</a>
 					          	</td>
+					          	<td ng-show="session.fifa_manager">
+				                <a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
+				                <i class="mdi-action-delete" ng-click="item.delete = true"></i>
+				                </a>
+					              <span ng-show="item.delete">
+					                <a href="javascript:void(0);" class="btn-link" ng-click="deleteMatch(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
+					                <a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
+					              </span>
+				              </td>
 					          </tr>
 					        </tbody>
 					      </table>  
@@ -475,7 +511,7 @@
 									        Previous
 									    </button>
 									    {{currentPage+1}}/{{numberOfPages()}}
-									    <button ng-disabled="currentPage >= pageData.tournamentMatches.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+									    <button ng-disabled="currentPage >= pageData.regularMatches.length/pageSize - 1" ng-click="currentPage=currentPage+1">
 									        Next
 									    </button>
 					      		</div>

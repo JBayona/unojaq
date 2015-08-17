@@ -109,6 +109,12 @@ angular.module('vestaParkingApp')
 
     var getTournamentMatches = function(tournamentId){    	
     	Fifa.getTournamentMatches(tournamentId).then(function(response){
+    		$scope.pageData.regularMatches = [];
+    		angular.forEach(response.results,function(match){
+    			if(!match.wildcard && !match.playoffs){
+    				$scope.pageData.regularMatches.push(match);
+    			}
+    		});
     		$scope.pageData.tournamentMatches = response.results;
         $scope.pageData.tournamentMatchesBk = response.results;
     		getTable();
@@ -165,6 +171,7 @@ angular.module('vestaParkingApp')
       $scope.pageData.faceToFaceMatches = [];
       $scope.pageData.faceToFaceTable = [];
       $scope.pageData.newMatch = {};  	
+      $scope.currentPage = 0;
     	getTournamentPlayers($scope.pageData.selectedTournament.objectId);
     	getTournamentMatches($scope.pageData.selectedTournament.objectId);
     };
@@ -201,7 +208,12 @@ angular.module('vestaParkingApp')
         $scope.pageData.selectedGroup = null;
     	$scope.pageData.teams = {};
     	getTournamentPlayers($scope.pageData.selectedTournament.objectId);
+    };
 
+    $scope.deletePlayer = function(objectId){
+    	Fifa.deleteTournamentPlayer(objectId).then(function(){
+    		getTournamentPlayers($scope.pageData.selectedTournament.objectId);		
+    	});
     };
 
     $scope.addMatch = function(){
@@ -221,15 +233,21 @@ angular.module('vestaParkingApp')
     	getTournamentMatches($scope.pageData.selectedTournament.objectId);
     };
 
+    $scope.deleteMatch = function(objectId){
+    	Fifa.deleteTournamentMatch(objectId).then(function(){
+    		getTournamentMatches($scope.pageData.selectedTournament.objectId);		
+    	});
+    };
+
     $scope.updateScore = function(objectId,field,value){
     	Fifa.updateMatchScore(objectId,field,value);
     };
 
     $scope.numberOfPages=function(){
-    	if(!$scope.pageData.tournamentMatches){
+    	if(!$scope.pageData.regularMatches){
     		return;
     	}
-      return Math.ceil($scope.pageData.tournamentMatches.length/$scope.pageSize);                
+      return Math.ceil($scope.pageData.regularMatches.length/$scope.pageSize);                
     };
 
     $scope.matchFilter = function(item,matchArray){
