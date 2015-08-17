@@ -205,11 +205,13 @@ angular.module('vestaParkingApp')
       window.open('https://www.google.com/calendar/render?action=TEMPLATE&text=Jacarandas%20Parking&dates='+startDate+'/'+endDate+'&details=Jacarandas%20parking%20turn&location=Jacarandas%20office&sprop=&sprop=name:#eventpage_6');      
     };
     var addEvent = function(userId){
-      if($scope.tokens < 1){
+      if($scope.tokens < 1 && !$rootScope.session.fixed){
         return;
       }
-      userId = userId ? userId : $rootScope.session.objectId;
-      $scope.tokens--;
+      if(!$rootScope.session.fixed){
+        $scope.tokens--;
+      }
+      userId = userId ? userId : $rootScope.session.objectId;      
       var item = {};
       item.user = item.user={'__type':'Pointer','className':'_User','objectId':userId};
       item.startsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(9).toISOString()};
@@ -222,13 +224,18 @@ angular.module('vestaParkingApp')
           },2000);
         getEvents();
         $scope.newEvent = {};
-        if($scope.tokens === 0){
-          setNextTurn($rootScope.session);
-        }else{
-          Current.updateTokens($scope.tokens);
-        }
+        if(!$rootScope.session.fixed){
+          if($scope.tokens === 0){
+            setNextTurn($rootScope.session);
+          }else{
+            Current.updateTokens($scope.tokens);
+          }
+        }        
       });
     };
+    $scope.addSingle = function(){
+
+    }
     $scope.addEvent = function(userId){
       getParkingInfo(addEvent);
     };

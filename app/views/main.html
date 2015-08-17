@@ -66,6 +66,7 @@
           </div>
         </div>
       </div>
+
       <div class="well" ng-show="tokens>0 || session.fixed">
         <div class="row">
           <h4>New parking event</h4>
@@ -98,10 +99,11 @@
           </div>
           <div class="col-md-2">
             <span id="addToCalendar"></span>
-            <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addEvent()"><i class="mdi-content-add"></i>Add</button></span>
+            <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addEvent()"><i class="mdi-content-add"></i>Add</button></span>            
             <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addAndSync()"><i class="mdi-notification-sync"></i>Add & Sync</button></span>
             <span ng-show="session.parking_manager && !selectedUser.fixed"><button class="btn btn-info" ng-click="addExternalEvent(selectedUser.objectId)">Add</button></span>
-            <span ng-show="newEvent.date && (session.fixed || (session.parking_manager && selectedUser.fixed))"><button class="btn btn-info" ng-click="addFixedEvent()">Add</button></span>
+            <span ng-show="newEvent.date && (session.fixed || (session.parking_manager && selectedUser.fixed))"><button class="btn btn-primary" ng-click="addFixedEvent()"><i class="mdi-content-add"></i>3 weeks</button></span>
+            <span ng-show="newEvent.date && session.fixed"><button class="btn btn-info" ng-click="addEvent()"><i class="mdi-content-add"></i>1 day</button></span>
           </div>
         </div>
       </div>
