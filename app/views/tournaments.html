@@ -557,7 +557,7 @@
 					        </thead>
 					        <tbody>
 					          <tr ng-repeat="item in $parent.pageData.tableArray | filter:{'group':key}" ng-class="{'me':item.player.objectId === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
-					          	<td>					          		
+					          	<td>{{$index+1}}	          		
 					          		<img 
 					          		ng-show="$parent.pageData.teamByPlayer[item.player.objectId].image" 
 					          		class="fifa-xs-logo" 

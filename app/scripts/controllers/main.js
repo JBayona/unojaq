@@ -17,6 +17,12 @@ angular.module('vestaParkingApp')
     $scope.events=[];
     $scope.fullDays = [];
     $scope.myEvents = [];
+    var holidays = [];
+    holidays.push(moment('2015-09-07').toISOString());
+    holidays.push(moment('2015-09-14').toISOString());
+    holidays.push(moment('2015-11-26').toISOString());
+    holidays.push(moment('2015-11-27').toISOString());
+    holidays.push(moment('2015-12-25').toISOString());
     $scope.tokens = 0;
     var dateDisableDeferred =  $q.defer();
   	$scope.dateDisablePromise = dateDisableDeferred.promise;
@@ -239,6 +245,7 @@ angular.module('vestaParkingApp')
     $scope.addEvent = function(userId){
       getParkingInfo(addEvent);
     };
+    
 
     $scope.disabled = function(date, mode) {
     	if($rootScope.session.parking_manager && !$scope.selectedUser.fixed){
@@ -253,6 +260,7 @@ angular.module('vestaParkingApp')
     		return ((mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
 	    	|| $scope.fullDays.indexOf(moment(date).hour(0).toISOString())!== -1
 	    	|| $scope.myEvents.indexOf(moment(date).hour(0).toISOString())!== -1
+        || holidays.indexOf(moment(date).hour(0).toISOString())!== -1
 	    	|| moment(date).isBefore(moment().add(-1,'day'))
 	    	|| moment(date).isAfter(moment().add(15,'day')));	
     	}
