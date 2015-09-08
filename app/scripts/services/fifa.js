@@ -14,7 +14,7 @@ angular.module('vestaParkingApp')
 			return Proxy.postCall(team,'https://api.parse.com/1/classes/fifa_teams');
 		};
 		this.getTeams = function(leagueId){
-			return Proxy.getCall('https://api.parse.com/1/classes/fifa_teams?order=name&where={"league":{"__type":"Pointer","className":"fifa_leagues","objectId":"'+leagueId+'"}}',{});
+			return Proxy.getCall('https://api.parse.com/1/classes/fifa_teams?limit=500&order=name&where={"league":{"__type":"Pointer","className":"fifa_leagues","objectId":"'+leagueId+'"}}',{});
 		};
 
 		this.getLeagues = function(){
