@@ -8,7 +8,7 @@
  * Controller of the vestaParkingApp
  */
 angular.module('vestaParkingApp')
-  .controller('MainCtrl', ['$scope','Current','Events','$rootScope','$q','$timeout','Mailgun','LoginService','Parking','Session',function ($scope,Current,Events,$rootScope,$q,$timeout,Mailgun,LoginService,Parking,Session) {
+  .controller('MainCtrl', ['$scope','Current','Events','$rootScope','$q','$timeout','Mailgun','LoginService','Parking','Session','$interval','Proxy',function ($scope,Current,Events,$rootScope,$q,$timeout,Mailgun,LoginService,Parking,Session,$interval,Proxy) {
     //These variables MUST be set as a minimum for the calendar to work
     $scope.calendarView = 'month';
     $scope.calendarDay = new Date();
@@ -107,7 +107,7 @@ angular.module('vestaParkingApp')
 	    		if(calendarEvent.type === 'special'){
 	    			item.deletable = $rootScope.session.beer_manager;	
 	    		}else{
-	    			item.deletable = $rootScope.session.objectId === calendarEvent.user.objectId;	
+	    			item.deletable = ($rootScope.session.objectId === calendarEvent.user.objectId) || $rootScope.session.parking_manager;	
 	    		}
 	    		
 	    		item.objectId = calendarEvent.objectId;
@@ -319,4 +319,6 @@ angular.module('vestaParkingApp')
     getCurrent();
     getEvents();
     getParkingInfo();
+
+    
   }]);
