@@ -65,7 +65,7 @@ angular.module('vestaParkingApp')
 
 		
 
-		return{
+		return{ //Purpose
 			postCall:postCall,
 			putCall:putCall,
 			getCall:getCall,

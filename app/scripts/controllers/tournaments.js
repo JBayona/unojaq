@@ -184,7 +184,6 @@ angular.module('vestaParkingApp')
       $scope.pageData.newMatch = {};  	
       $scope.currentPage = 0;
     	getTournamentPlayers($scope.pageData.selectedTournament.objectId);
-      angular.forEach
     };
     
     $scope.selectCountry = function(country){
@@ -297,6 +296,10 @@ angular.module('vestaParkingApp')
     $scope.order = function(predicate, reverse) {
 	    $scope.pageData.tableArray = orderBy($scope.pageData.tableArray, predicate, reverse);
 	  };
+
+    $scope.getCatalogScreen = function(){
+      return "views/fifa.html";
+    }
 
     //init routines
     getTournaments();

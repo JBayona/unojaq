@@ -37,12 +37,20 @@ angular
         templateUrl: 'views/tournaments.html',
         controller: 'TournamentsCtrl',
         auth: true
+      }).when('/madden', {
+        templateUrl: 'views/madden.html',
+        controller: 'MaddenCtrl',
+        auth: true
+      }).when('/tournament', {
+        templateUrl: 'views/tournaments_madden.html',
+        controller: 'MaddenTournamentCtrl',
+        auth: true
       }).otherwise({
         redirectTo: '/'
       });
       localStorageServiceProvider.setStorageType('sessionStorage');
   }]).run(['$rootScope','$location','$cookieStore','Session','LoginService','$timeout','material',function($rootScope,$location,$cookieStore,Session,LoginService,$timeout,material){
-    material.init();
+    material.init(); //We load the material design library when the application runs
     $rootScope.logout = function(){
       Session.logout();
     };

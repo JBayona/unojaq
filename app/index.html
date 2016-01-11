@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
     <link rel="stylesheet" media="screen and (min-width: 768px)" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material.min.css" />
+    <!-- If we have a small resolution we're going to use this material design --->
   </head>
   <body ng-app="vestaParkingApp">
     <!--[if lt IE 7]>
@@ -37,23 +38,40 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar" ng-init="activeMenu = 'parking'">
           <ul class="nav navbar-nav navbar-right">
-            <li ng-show="session" class="dropdown" ng-class="{'active':activeMenu === '/fifa'}">
-              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-av-games"></i>Fifa<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#/fifa">Catalog</a></li>
-                <li><a href="#/tournaments">Tournaments</a></li>
-              </ul>
-            </li>
-            </li>
-            <li ng-show="session" ng-class="{'active':activeMenu === '/donuts'}"><a href="#/donuts"><i class="mdi-toggle-radio-button-on"></i> Donuts</a></li>
-            <li ng-show="session" ng-class="{'active':activeMenu === '/main'}"><a href="#/main"><i class="mdi-notification-event-available"></i> Calendar</a></li>
-            <li ng-show="session" class="dropdown">
-              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-social-person-outline"></i> {{session.first_name}} {{session.last_name}}<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:void(0)" ng-click="passwordReset()">Password reset</a></li>
-                <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>
-              </ul>
-            </li>
+
+                <li ng-show="session" class="dropdown" ng-class="{'active':activeMenu === '/fifa'}">
+                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <i class="mdi-av-games"></i>
+                    Games<span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li>
+                      <!--<a href="#/fifa">Catalog</a>-->
+                      <a href="#/tournaments">Fifa</a>
+                    </li>
+                    <li>
+                      <a href="#/tournament">Madden</a>
+                    </li>
+                  </ul>
+                </li>
+
+                 <!--<li ng-show="session" class="dropdown" ng-class="{'active':activeMenu === '/madden'}">
+                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-av-games"></i>Madden<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#/madden">Catalog</a></li>
+                    <li><a href="#/tournament">Tournaments</a></li>
+                  </ul>
+                </li>-->
+
+                <li ng-show="session" ng-class="{'active':activeMenu === '/donuts'}"><a href="#/donuts"><i class="mdi-toggle-radio-button-on"></i> Donuts</a></li>
+                <li ng-show="session" ng-class="{'active':activeMenu === '/main'}"><a href="#/main"><i class="mdi-notification-event-available"></i> Calendar</a></li>
+                <li ng-show="session" class="dropdown">
+                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-social-person-outline"></i> {{session.first_name}} {{session.last_name}}<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="javascript:void(0)" ng-click="passwordReset()">Password reset</a></li>
+                    <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>
+                  </ul>
+                </li>
           </ul>
         </div>
       </div>
@@ -88,6 +106,8 @@
        ga('send', 'pageview');
     </script>
 
+    <!-- Multiple Dropdown Support -->
+
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -108,6 +128,25 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
+    <script>
+      $(function(){
+  $(".dropdown-menu > li > a.trigger").on("click",function(e){
+    var current=$(this).next();
+    var grandparent=$(this).parent().parent();
+    if($(this).hasClass('left-caret')||$(this).hasClass('right-caret'))
+      $(this).toggleClass('right-caret left-caret');
+    grandparent.find('.left-caret').not(this).toggleClass('right-caret left-caret');
+    grandparent.find(".sub-menu:visible").not(current).hide();
+    current.toggle();
+    e.stopPropagation();
+  });
+  $(".dropdown-menu > li > a:not(.trigger)").on("click",function(){
+    var root=$(this).closest('.dropdown');
+    root.find('.left-caret').toggleClass('right-caret left-caret');
+    root.find('.sub-menu:visible').hide();
+  });
+});
+    </script>
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/modules/login/login.js"></script>
@@ -131,10 +170,13 @@
         <script src="scripts/controllers/fifa.js"></script>
         <script src="scripts/controllers/tournaments.js"></script>
         <script src="scripts/filters/startfrom.js"></script>
+        <script src="scripts/services/madden.js"></script>
+        <script src="scripts/controllers/madden.js"></script>
+        <script src="scripts/controllers/madden_tournament.js"></script>
         <!-- endbuild -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script> <!--This is add manually -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.js"></script>  <!--This is add manually -->
     <script src="scripts/ouical.min.js"></script>
     
 </body>

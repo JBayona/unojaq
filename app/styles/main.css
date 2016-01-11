@@ -9,6 +9,10 @@ body {
   padding: 0;
 }
 
+.catalog-padding{
+  padding: 15px;
+}
+
 .fifa-logo{
   height: 40px; 
   width: 40px;
@@ -29,6 +33,10 @@ body {
 }
 .winner{
   font-weight: bold;
+}
+
+.table-madden{
+  text-align: left;
 }
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -125,10 +133,3 @@ body {
 }
 .me { background-color:#ffffcc }
 .donut-badge { background-color:#7AF}
-
-
-
-
-
-
-

@@ -91,7 +91,7 @@ angular.module('vestaParkingApp')
 	    		if(calendarEvent.title){
 	    			item.title = calendarEvent.title;	
 	    		}else{
-	    			item.title = calendarEvent.user.first_name;	
+	    			item.title = calendarEvent.user.first_name + " " + calendarEvent.user.last_name.charAt(0);
 	    			dayCount = lastDay && lastDay === moment(item.startsAt).day() ? dayCount+1 : 1;
 		    		lastDay = moment(item.startsAt).day();
 		    		if(dayCount>=6){
@@ -219,6 +219,7 @@ angular.module('vestaParkingApp')
       }
       userId = userId ? userId : $rootScope.session.objectId;      
       var item = {};
+      console.log("User = " + userId);
       item.user = item.user={'__type':'Pointer','className':'_User','objectId':userId};
       item.startsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(9).toISOString()};
       item.endsAt = {__type:'Date',iso: moment(moment($scope.newEvent.date)).hour(18).toISOString()};
