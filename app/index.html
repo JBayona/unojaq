@@ -27,45 +27,45 @@
     <div class="header">
       <nav class="navbar navbar-findcond navbar-fixed-top">
         <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#/main">Jacarandas Management</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar" ng-init="activeMenu = 'parking'">
-          <ul class="nav navbar-nav navbar-right">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/main">Jacarandas Management</a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar" ng-init="activeMenu = 'parking'">
+            <ul class="nav navbar-nav navbar-right">
 
-                <li ng-show="session" class="dropdown" ng-class="{'active':activeMenu === '/fifa'}">
-                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                    <i class="mdi-av-games"></i>
-                    Games<span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li>
-                      <a href="#/tournaments">Fifa</a>
-                    </li>
-                    <li>
-                      <a href="#/tournament">Madden</a>
-                    </li>
-                  </ul>
-                </li>
-                <li ng-show="session" ng-class="{'active':activeMenu === '/donuts'}"><a href="#/donuts"><i class="mdi-toggle-radio-button-on"></i> Donuts</a></li>
-                <li ng-show="session" ng-class="{'active':activeMenu === '/main'}"><a href="#/main"><i class="mdi-notification-event-available"></i> Calendar</a></li>
-                <li ng-show="session" class="dropdown">
-                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-social-person-outline"></i> {{session.first_name}} {{session.last_name}}<span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="javascript:void(0)" ng-click="passwordReset()">Password reset</a></li>
-                    <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>
-                  </ul>
-                </li>
-          </ul>
+                  <li ng-show="session" class="dropdown" ng-class="{'active':activeMenu === '/fifa'}">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                      <i class="mdi-av-games"></i>
+                      Games<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>
+                        <a href="#/tournaments">Fifa</a>
+                      </li>
+                      <li>
+                        <a href="#/tournament">Madden</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li ng-show="session" ng-class="{'active':activeMenu === '/donuts'}"><a href="#/donuts"><i class="mdi-toggle-radio-button-on"></i> Donuts</a></li>
+                  <li ng-show="session" ng-class="{'active':activeMenu === '/main'}"><a href="#/main"><i class="mdi-notification-event-available"></i> Calendar</a></li>
+                  <li ng-show="session" class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-social-person-outline"></i> {{session.first_name}} {{session.last_name}}<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="javascript:void(0)" ng-click="passwordReset()">Password reset</a></li>
+                      <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>
+                    </ul>
+                  </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     </div>
     <div class="row" ng-show="resetConfirmation">
       <div class="alert alert-dismissable alert-success">

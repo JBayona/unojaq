@@ -34,6 +34,7 @@
 <div ng-show="pageData.selectedTournament">
 	<div class="panel-group" id="accordion">
 	  <div class="panel" id="players">
+
 	  	<div class="panel-heading">
 	      <h3 class="panel-title">
 	        <a data-toggle="collapse" class="collapsed" href="javascript:void(0);" data-target="#playersContent">
@@ -43,136 +44,132 @@
 	    </div>
 
 	    <div id="playersContent" class="collapse">
-	    	<div class="panel-body">
-	    		
-	    		<!--Start session manager-->
-	    		<div class="well" ng-show="session.madden_manager">
-		      		<h4>New player</h4>
-			        <div class="row">        	
-				        	<div class="col-md-2"> <!-- To select all info that will be send to add the new user -->			
-										<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span ng-show="pageData.newPlayer.selectedUser">{{pageData.newPlayer.selectedUser.first_name}} {{pageData.newPlayer.selectedUser.last_name}}</span>
-											<span ng-hide="pageData.newPlayer.selectedUser">Select a user</span>
-											<b class="caret"></b>
-											<div class="ripple-wrapper"></div>
-										</a>
-										<ul class="dropdown-menu">
-							        <li ng-repeat="user in pageData.users"> <!-- In this secion we get the info on an empty object pageData.newPlayer.selectedUser = user -->
-							        	<a ng-show="user.fifa_player" href="javascript:void(0)" ng-click="pageData.newPlayer.selectedUser = user">{{user.first_name}} {{user.last_name}}</a>
-							        </li> <!-- We assign user because is the variable we use to iterate the users -->
-							      </ul>
-									</div>
-									<div class="col-md-2">			
-										<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span ng-show="pageData.selectedCountry">{{pageData.selectedCountry}}</span>
-											<span ng-hide="pageData.selectedCountry">Select country</span>
-											<b class="caret"></b><div class="ripple-wrapper"></div>
-										</a>
-										<ul class="dropdown-menu">
-								      <li ng-repeat="(key,value) in pageData.leaguesByCountry">
-								      	<a href="javascript:void(0)" ng-click="selectCountry(key)">
-								      		{{key}}
-								      	</a>
-								      </li>
-								    </ul>
-									</div>
-									<div class="col-md-3">			
-										<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span ng-show="pageData.selectedLeague">
-												<img ng-show="pageData.selectedLeague.image" class="fifa-logo" ng-src="{{pageData.selectedLeague.image}}">{{pageData.selectedLeague.name}}
-											</span>
-											<span ng-hide="pageData.selectedLeague">Select a league</span>
-											<b class="caret"></b><div class="ripple-wrapper"></div>
-										</a>
-										<ul class="dropdown-menu">
-								      <li ng-repeat="league in pageData.leaguesByCountry[pageData.selectedCountry]">
-								      	<a href="javascript:void(0)" ng-click="selectLeague(league)">
-								      		<img ng-show="league.image" class="fifa-logo" ng-src="{{league.image}}">{{league.name}}
-								      	</a>
-								    	</li>
-								    </ul>
-									</div>
-									<div class="col-md-3">			
-										<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span ng-show="pageData.selectedTeam">
-												<img ng-show="pageData.selectedTeam.image" class="fifa-logo" ng-src="{{pageData.selectedTeam.image}}">{{pageData.selectedTeam.name}}
-											</span>
-											<span ng-hide="pageData.selectedTeam">Select a team</span>
-											<b class="caret"></b>
-											<div class="ripple-wrapper"></div>
-										</a>
-										<ul class="dropdown-menu">
-								      <li ng-repeat="team in pageData.teams">
-								      	<a href="javascript:void(0)" ng-click="pageData.selectedTeam = team">
-								      		<img ng-show="team.image" class="fifa-logo" ng-src="{{team.image}}">{{team.name}}
-								      	</a>
-								      </li>
-								    </ul>
-									</div>			
-									<div class="col-md-2" ng-show="pageData.selectedTournament.groups">
-										<a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span ng-show="pageData.selectedGroup">{{pageData.selectedGroup}}</span>
-											<span ng-hide="pageData.selectedGroup">Select group</span>
-											<b class="caret"></b>
-											<div class="ripple-wrapper"></div>
-										</a>
-										<ul class="dropdown-menu">
-							        <li>
-							        	<a href="javascript:void(0)" ng-click="pageData.selectedGroup = 'A'">A</a>
-							        </li>
-							        <li>
-							        	<a href="javascript:void(0)" ng-click="pageData.selectedGroup = 'B'">B</a>
-							        </li>
-							      </ul>
-									</div>			
-			        </div>
-			        
-			        <div class="row">
-			        	<div class="col-md-2">
-									<button type="button" class="btn btn-primary" ng-hide="!pageData.newPlayer.selectedUser ||
-									!pageData.selectedCountry || !pageData.selectedLeague || !pageData.selectedTeam" ng-click="addPlayer()">Add player</button>
-								</div>
-		        </div>
-	      	</div> <!--End session manager-->
+  			<div class="panel-body">
+        <!--Start session manager-->
+        	<div class="well" ng-show="session.madden_manager">
+           <h4>New player</h4>
+            <div class="row">        	
+               <div class="col-md-2"> <!-- To select all info that will be send to add the new user -->			
+                   <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <span ng-show="pageData.newPlayer.selectedUser">{{pageData.newPlayer.selectedUser.first_name}} {{pageData.newPlayer.selectedUser.last_name}}</span>
+                      <span ng-hide="pageData.newPlayer.selectedUser">Select a user</span>
+                      <b class="caret"></b>
+                      <div class="ripple-wrapper"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="user in pageData.users"> <!-- In this secion we get the info on an empty object pageData.newPlayer.selectedUser = user -->
+                            <a ng-show="user.fifa_player" href="javascript:void(0)" ng-click="pageData.newPlayer.selectedUser = user">{{user.first_name}} {{user.last_name}}</a>
+                        </li> <!-- We assign user because is the variable we use to iterate the users -->
+                    </ul>
+                </div>
+                <div class="col-md-2">			
+                    <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span ng-show="pageData.selectedCountry">{{pageData.selectedCountry}}</span>
+                        <span ng-hide="pageData.selectedCountry">Select country</span>
+                        <b class="caret"></b><div class="ripple-wrapper"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="(key,value) in pageData.leaguesByCountry">
+                            <a href="javascript:void(0)" ng-click="selectCountry(key)">
+                                {{key}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">			
+                    <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span ng-show="pageData.selectedLeague">
+                            <img ng-show="pageData.selectedLeague.image" class="fifa-logo" ng-src="{{pageData.selectedLeague.image}}">{{pageData.selectedLeague.name}}
+                        </span>
+                        <span ng-hide="pageData.selectedLeague">Select a league</span>
+                        <b class="caret"></b><div class="ripple-wrapper"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="league in pageData.leaguesByCountry[pageData.selectedCountry]">
+                            <a href="javascript:void(0)" ng-click="selectLeague(league)">
+                                <img ng-show="league.image" class="fifa-logo" ng-src="{{league.image}}">{{league.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">			
+                    <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span ng-show="pageData.selectedTeam">
+                            <img ng-show="pageData.selectedTeam.image" class="fifa-logo" ng-src="{{pageData.selectedTeam.image}}">{{pageData.selectedTeam.name}}
+                        </span>
+                        <span ng-hide="pageData.selectedTeam">Select a team</span>
+                        <b class="caret"></b>
+                        <div class="ripple-wrapper"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="team in pageData.teams">
+                            <a href="javascript:void(0)" ng-click="pageData.selectedTeam = team">
+                                <img ng-show="team.image" class="fifa-logo" ng-src="{{team.image}}">{{team.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>			
+                <div class="col-md-2" ng-show="pageData.selectedTournament.groups">
+                    <a href="javascript:void(0)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span ng-show="pageData.selectedGroup">{{pageData.selectedGroup}}</span>
+                        <span ng-hide="pageData.selectedGroup">Select group</span>
+                        <b class="caret"></b>
+                        <div class="ripple-wrapper"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:void(0)" ng-click="pageData.selectedGroup = 'A'">A</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" ng-click="pageData.selectedGroup = 'B'">B</a>
+                        </li>
+                    </ul>
+                </div>			
+            </div>
 
-	    		<div class="row">
-						<div class="col-md-12">
-							<div class="table-responsive">
-						     	<table class="table table-hover">
-						        	<thead>
-						         		 <tr>      					          	 
-						           			 <th>Player</th>					           
-						            		 <th>Team</th>	
-						            		 <th ng-show="pageData.selectedTournament.groups">Group</th>
-						            	</tr>
-						        	</thead>
-						        	<tbody>
-						          		<tr ng-repeat="item in pageData.tournamentPlayers" ng-class="{'me':item.player.objectId === session.objectId}">
-						          			<td>{{item.player.first_name}} {{item.player.last_name}}</td>
-						          			<td><img ng-show="item.team.image" class="fifa-md-logo" ng-src="{{item.team.image}}"> {{item.team.name}}</td>
-								          	<td ng-show="pageData.selectedTournament.groups">{{item.group}}</td>
-								          	<td ng-show="session.madden_manager">
-				                				<a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
-				                					<i class="mdi-action-delete" ng-click="item.delete = true"></i>
-				               					 </a>
-						              			<span ng-show="item.delete">
-							               			 <a href="javascript:void(0);" class="btn-link" ng-click="deletePlayer(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
-							                		<a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
-						              			</span>
-					              			</td>
-						          		</tr>
-						        	</tbody>
-						      </table>  
-						    </div>
-						</div>
-				</div>
+            <div class="row">
+                <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" ng-hide="!pageData.newPlayer.selectedUser ||
+                                                                                        !pageData.selectedCountry || !pageData.selectedLeague || !pageData.selectedTeam" ng-click="addPlayer()">Add player</button>
+                </div>
+            </div>
+        </div> <!--End session manager-->
 
-
-	    	</div>
-	    </div>
-	  </div>
-	</div>
-
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>      					          	 
+                                <th>Player</th>					           
+                                <th>Team</th>	
+                                <th ng-show="pageData.selectedTournament.groups">Group</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in pageData.tournamentPlayers" ng-class="{'me':item.player.objectId === session.objectId}">
+                                <td>{{item.player.first_name}} {{item.player.last_name}}</td>
+                                <td><img ng-show="item.team.image" class="fifa-md-logo" ng-src="{{item.team.image}}"> {{item.team.name}}</td>
+                                <td ng-show="pageData.selectedTournament.groups">{{item.group}}</td>
+                                <td ng-show="session.madden_manager">
+                                    <a href="javascript:void(0);" class="btn-link" ng-click="" ng-hide="item.delete">
+                                        <i class="mdi-action-delete" ng-click="item.delete = true"></i>
+                                    </a>
+                                    <span ng-show="item.delete">
+                                        <a href="javascript:void(0);" class="btn-link" ng-click="deletePlayer(item.objectId)"><i class="mdi-action-done"></i></a>&nbsp;
+                                        <a href="javascript:void(0);" class="btn-link" ng-click="item.delete = false"><i class="mdi-action-highlight-remove"></i></a>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                	</div>
+            	</div>
+       		 </div>
+    		</div>
+			</div>   
+	  </div> <!-- Close id players section -->
+	</div> <!--Close accordion-->
 	<div class="panel-group" id="accordion">
 		<div class="panel" id="matches">
 			<div class="panel-heading">
@@ -577,9 +574,7 @@
 	    	</div>
 		</div>
 	</div>
-</div>
-
-<div class="panel-group" id="accordion">
+	<div class="panel-group" id="accordion">
 	  <div class="panel" id="table">
 	    <div class="panel-heading">
 	      <h3 class="panel-title">
@@ -631,51 +626,53 @@
 					      </table>  
 					    </div> 
 						</div>
-					</div>
+			</div>
 					<!--div class="row" ng-repeat="(key,value) in pageData.tournamentGroups">
 	        	<div class="col-md-12" ng-show="pageData.selectedTournament.groups">
 	        		Group {{key}}
 	        	</div-->
 						<div class="col-md-12">
 							<div class="table-responsive">
-					      <table class="table table-hover">
-					        <thead>
-					          <tr>      					          	 
-					            <th>Team</th>					           
-					            <th class="text-center" ng-click="reverse=!reverse;order('played',reverse)">P</th>        
-					            <th class="text-center" ng-click="reverse=!reverse;order('win',reverse)">W</th>
-					            <th class="text-center" ng-click="reverse=!reverse;order('draw',reverse)">D</th>
-					            <th class="text-center" ng-click="reverse=!reverse;order('lost',reverse)">L</th>
-					            <th class="text-center" ng-click="reverse=!reverse;order('pct',reverse)">Pct</th>
-					            <th class="text-center" ng-click="reverse=!reverse;order('scored',reverse)">PF</th>
-					            <th class="text-center" ng-click="reverse=!reverse;order('received',reverse)">PA</th>
-					          </tr>
-					        </thead>
-					        <tbody class="text-center">
-					    		<b>General Table<b>
-					          <tr ng-repeat="item in tableArrayGeneral" ng-class="{'me':item.player.objectId === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
-					          	<td class="table-madden">{{$index+1}}	          		
-					          		<img 
-					          		ng-show="$parent.pageData.teamByPlayer[item.player.objectId].image" 
-					          		class="fifa-xs-logo" 
-					          		ng-src="{{$parent.pageData.teamByPlayer[item.player.objectId].image}}"
-					          		>
-					          		{{$parent.pageData.teamByPlayer[item.player.objectId].name}}
-					          	</td>
-					          	<td>{{item.played}}</td>
-					          	<td>{{item.win}}</td>
-					          	<td>{{item.draw}}</td>
-					          	<td>{{item.lost}}</td>
-					          	<td>{{item.pct | number:3}}</td>
-					          	<td>{{item.scored}}</td>
-					          	<td>{{item.received}}</td>
-					          </tr>
-					        </tbody>
-					      </table>  
-					    </div> 
+						      <table class="table table-hover">
+						        <thead>
+						          <tr>      					          	 
+						            <th>Team</th>					           
+						            <th class="text-center" ng-click="reverse=!reverse;order('played',reverse)">P</th>        
+						            <th class="text-center" ng-click="reverse=!reverse;order('win',reverse)">W</th>
+						            <th class="text-center" ng-click="reverse=!reverse;order('draw',reverse)">D</th>
+						            <th class="text-center" ng-click="reverse=!reverse;order('lost',reverse)">L</th>
+						            <th class="text-center" ng-click="reverse=!reverse;order('pct',reverse)">Pct</th>
+						            <th class="text-center" ng-click="reverse=!reverse;order('scored',reverse)">PF</th>
+						            <th class="text-center" ng-click="reverse=!reverse;order('received',reverse)">PA</th>
+						          </tr>
+						        </thead>
+						        <tbody class="text-center">
+						    		<b>General Table<b>
+						          <tr ng-repeat="item in tableArrayGeneral" ng-class="{'me':item.player.objectId === session.objectId, 'playoffs':$index < pageData.selectedTournament.playoffs_end, 'wildcard':$index+1 >= pageData.selectedTournament.wildcard_start && $index < pageData.selectedTournament.wildcard_end}">
+						          	<td class="table-madden">{{$index+1}}	          		
+						          		<img 
+						          		ng-show="$parent.pageData.teamByPlayer[item.player.objectId].image" 
+						          		class="fifa-xs-logo" 
+						          		ng-src="{{$parent.pageData.teamByPlayer[item.player.objectId].image}}"
+						          		>
+						          		{{$parent.pageData.teamByPlayer[item.player.objectId].name}}
+						          	</td>
+						          	<td>{{item.played}}</td>
+						          	<td>{{item.win}}</td>
+						          	<td>{{item.draw}}</td>
+						          	<td>{{item.lost}}</td>
+						          	<td>{{item.pct | number:3}}</td>
+						          	<td>{{item.scored}}</td>
+						          	<td>{{item.received}}</td>
+						          </tr>
+						        </tbody>
+						      </table>  
+						    </div> 
 						</div>
 					</div>
 	      <!--/div-->
 	    </div>
 	  </div>
+	</div>
 </div>
+
