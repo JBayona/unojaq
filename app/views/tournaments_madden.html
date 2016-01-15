@@ -1,20 +1,20 @@
 <!--Catalog section -->
-<div class="panel-group" id="accordion">
-	  <div class="panel">
-	    <div class="panel-heading">
-	      <h3 class="panel-title">
-	        <a data-toggle="collapse" class="collapsed" href="javascript:void(0);" data-target="#maddenCatalog">
-	          Catalog
-	        </a>
-	      </h3>
-	    </div>
-	    <div class="collapse" id="maddenCatalog">
-	    	<div class="row">
-	    		<div class="col-md-12 catalog-padding">
-	    			<div ng-include="getCatalogScreen()" />
-	    		</div>
-	    	</div>
-	    </div>
+<div id="accordionMaddenCatalog"> <!--panel-group-->
+	  <div class="panel" id="catalogMadden">
+		    <div class="panel-heading">
+		      <h3 class="panel-title">
+		        <a data-toggle="collapse" class="collapsed" href="javascript:void(0);" data-target="#maddenCatalog">
+		          Catalog
+		        </a>
+		      </h3>
+		    </div>
+		    <div class="collapse" id="maddenCatalog">
+		    	<div class="row">
+		    		<div class="col-md-12 catalog-padding">
+		    			<div ng-include="getCatalogScreen()" />
+		    		</div>
+		    	</div>
+		    </div>
 	  </div>
 </div>
 <div class="well">
@@ -309,8 +309,8 @@
 						            <th>Player</th>					           
 						            <th>P</th>					            
 						            <th>W</th>
-						            <th>D</th>
 						            <th>L</th>
+						            <th>D</th>
 						            <th>PF</th>
 						            <th>PA</th>
 						            <!--th>GD</th-->
@@ -328,10 +328,10 @@
 						          		{{item.win}}
 						          	</td>
 						          	<td>
-						          		{{item.draw}}
+						          		{{item.lost}}
 						          	</td>
 						          	<td>
-						          		{{item.lost}}
+						          		{{item.draw}}
 						          	</td>
 						          	<td>
 						          		{{item.scored}}
@@ -597,8 +597,8 @@
 					            <th>Team</th>					           
 					            <th class="text-center" ng-click="reverse=!reverse;order('played',reverse)">P</th>        
 					            <th class="text-center" ng-click="reverse=!reverse;order('win',reverse)">W</th>
-					            <th class="text-center" ng-click="reverse=!reverse;order('draw',reverse)">D</th>
 					            <th class="text-center" ng-click="reverse=!reverse;order('lost',reverse)">L</th>
+					            <th class="text-center" ng-click="reverse=!reverse;order('draw',reverse)">D</th>
 					            <th class="text-center" ng-click="reverse=!reverse;order('pct',reverse)">Pct</th>
 					            <th class="text-center" colspan="2">DIV</th>
 					          </tr>
@@ -616,8 +616,8 @@
 					          	</td>
 					          	<td>{{item.played}}</td>
 					          	<td>{{item.win}}</td>
-					          	<td>{{item.draw}}</td>
 					          	<td>{{item.lost}}</td>
+					          	<td>{{item.draw}}</td>
 					          	<td>{{item.pct | number:3}}</td>
 					          	<td>{{item.divW}}</td>
 					          	<td>{{item.divL}}</td>
@@ -639,8 +639,8 @@
 						            <th>Team</th>					           
 						            <th class="text-center" ng-click="reverse=!reverse;order('played',reverse)">P</th>        
 						            <th class="text-center" ng-click="reverse=!reverse;order('win',reverse)">W</th>
-						            <th class="text-center" ng-click="reverse=!reverse;order('draw',reverse)">D</th>
 						            <th class="text-center" ng-click="reverse=!reverse;order('lost',reverse)">L</th>
+						            <th class="text-center" ng-click="reverse=!reverse;order('draw',reverse)">D</th>
 						            <th class="text-center" ng-click="reverse=!reverse;order('pct',reverse)">Pct</th>
 						            <th class="text-center" ng-click="reverse=!reverse;order('scored',reverse)">PF</th>
 						            <th class="text-center" ng-click="reverse=!reverse;order('received',reverse)">PA</th>
@@ -659,8 +659,8 @@
 						          	</td>
 						          	<td>{{item.played}}</td>
 						          	<td>{{item.win}}</td>
-						          	<td>{{item.draw}}</td>
 						          	<td>{{item.lost}}</td>
+						          	<td>{{item.draw}}</td>
 						          	<td>{{item.pct | number:3}}</td>
 						          	<td>{{item.scored}}</td>
 						          	<td>{{item.received}}</td>
