@@ -72,8 +72,8 @@
           <h4>New parking event</h4>
           <p ng-hide="session.fixed"><b>Remaining tokens:</b> {{tokens}}</p>
           <p ng-show="session.fixed && !session.parking_manager">Select start date and click "add" button to fill 3 more weeks</p>          
-          <p ng-show="session.fixed && session.parking_manager && !selectedUser.fixed">Adding event for: {{selectedUser.first_name}} {{selectedUser.last_name}}. Tokens:{{selectedUser.tokens}}</p>
-          <div class="row" ng-show="addedConfirmation">
+          <p ng-show="session.fixed && session.parking_manager">Adding event for: {{selectedUser.first_name}} {{selectedUser.last_name}}. Tokens:{{selectedUser.tokens}}</p>
+          <div class="row" ng-show="addedConfirmation"> <!-- && !selectedUser.fixed -->
             <div class="alert alert-dismissable alert-success">
                 <button type="button" class="close" data-dismiss="alert">×</button>
                 <p>Your event has been added</p>
@@ -88,7 +88,7 @@
               <span ng-hide="selectedUser">Select a user</span>
               <b class="caret"></b><div class="ripple-wrapper"></div></a>
               <ul class="dropdown-menu">
-                <li ng-repeat="user in users"><a href="javascript:void(0)" ng-click="$parent.selectUser(user)" ng-show="user.parking_user && user.fixed === false">{{user.first_name}} {{user.last_name}} t:{{user.tokens}}</a></li>
+                <li ng-repeat="user in users"><a href="javascript:void(0)" ng-click="$parent.selectUser(user)" ng-show="user.parking_user">{{user.first_name}} {{user.last_name}} t:{{user.tokens}}</a></li> <!-- && user.fixed === false -->
               </ul>
             </div>
             <input type="text" class="form-control" ng-model="session.first_name" disabled ng-hide="session.parking_manager">
@@ -102,8 +102,8 @@
             <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addEvent()"><i class="mdi-content-add"></i>Add</button></span>            
             <span ng-hide="session.fixed || !newEvent.date"><button class="btn btn-primary" ng-click="addAndSync()"><i class="mdi-notification-sync"></i>Add & Sync</button></span>
             <span ng-show="session.parking_manager && !selectedUser.fixed"><button class="btn btn-info" ng-click="addExternalEvent(selectedUser.objectId)">Add</button></span>
-            <span ng-show="newEvent.date && (session.fixed || (session.parking_manager && selectedUser.fixed))"><button class="btn btn-primary" ng-click="addFixedEvent()"><i class="mdi-content-add"></i>3 weeks</button></span>
-            <span ng-show="newEvent.date && session.fixed"><button class="btn btn-info" ng-click="addEvent()"><i class="mdi-content-add"></i>1 day</button></span> 
+            <span ng-show="newEvent.date && (session.fixed || (session.parking_manager && selectedUser.fixed))"><button class="btn btn-primary" ng-click="addFixedEvent(selectedUser.objectId)"><i class="mdi-content-add"></i>3 weeks</button></span>
+            <span ng-show="newEvent.date && session.fixed"><button class="btn btn-info" ng-click="addEvent('1123324')"><i class="mdi-content-add"></i>1 day</button></span> 
           </div>
         </div>
       </div>

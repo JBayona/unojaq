@@ -124,9 +124,13 @@ angular.module('vestaParkingApp')
           if(user.parking_user){
             Parking.getParkingInfo(user.objectId).then(function(response){                          
               angular.forEach($scope.users,function(user){
-                if(user.objectId === response.results[0].user.objectId){
-                  user.tokens = response.results[0].tokens;    
-                  user.fixed = response.results[0].fixed;   
+                if(user.objectId === response.results[0].user.objectId){    
+                  user.fixed = response.results[0].fixed;
+                  if(user.fixed){
+                    user.tokens = 'Unlimited';
+                  }else{
+                     user.tokens = response.results[0].tokens;
+                  }   
                   user.parkingId = response.results[0].objectId;
                   user.turn = response.results[0].turn;
                 }
@@ -138,10 +142,11 @@ angular.module('vestaParkingApp')
       });
     };
     
-    $scope.addFixedEvent = function(){
+    $scope.addFixedEvent = function(userId){
     	for(var i=0;i<19;i++){
 	    	var item={};
-	    	item.user={'__type':'Pointer','className':'_User','objectId':$rootScope.session.objectId};
+	    	//item.user={'__type':'Pointer','className':'_User','objectId':$rootScope.session.objectId};
+        item.user = item.user={'__type':'Pointer','className':'_User','objectId':userId};
 	    	item.startsAt= {__type:'Date',iso: moment($scope.newEvent.date).hour(9).add(i, 'day').toISOString()};
 	    	item.endsAt= {__type:'Date',iso: moment($scope.newEvent.date).hour(18).add(i, 'day').toISOString()};
 	    	item.type = 'important';
@@ -200,6 +205,10 @@ angular.module('vestaParkingApp')
         getEvents();
         $scope.newEvent = {};        
       });
+    };
+
+    $scope.addEvent = function(){
+      alert("Hi");
     };
 
     $scope.addAndSync = function(){
