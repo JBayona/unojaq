@@ -207,10 +207,6 @@ angular.module('vestaParkingApp')
       });
     };
 
-    $scope.addEvent = function(){
-      alert("Hi");
-    };
-
     $scope.addAndSync = function(){
       $scope.addEvent();
       var startDate = moment(moment($scope.newEvent.date)).hour(9).toISOString();
