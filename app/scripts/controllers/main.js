@@ -94,7 +94,7 @@ angular.module('vestaParkingApp')
 	    			item.title = calendarEvent.user.first_name + " " + calendarEvent.user.last_name.charAt(0);
 	    			dayCount = lastDay && lastDay === moment(item.startsAt).day() ? dayCount+1 : 1;
 		    		lastDay = moment(item.startsAt).day();
-		    		if(dayCount>=7){ //We have 8 available parking spaces.
+		    		if(dayCount>=8){
 		    			$scope.fullDays.push(moment(calendarEvent.startsAt.iso).hour(0).toISOString());
 		    		}
 	    		}

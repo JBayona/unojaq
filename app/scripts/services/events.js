@@ -13,7 +13,7 @@ angular.module('vestaParkingApp')
     var getEvents = function(){
 	  	var data = {
 	  		'include':'user',
-	  		'limit':1000,
+	  		'limit':5000,
 	  		'order':'startsAt',
 	  		'where':'{"endsAt":{"$gte":{"__type":"Date","iso":"'+moment().day(-1).toISOString()+'"}}}'
 	  	};
