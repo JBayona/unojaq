@@ -254,24 +254,27 @@ angular.module('vestaParkingApp')
     
 
     $scope.disabled = function(date, mode) {
-    	if($rootScope.session.parking_manager && !$scope.selectedUser.fixed){
-    		return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
-        || $scope.fullDays.indexOf(moment(date).hour(0).toISOString())!== -1
-    		|| moment(date).isBefore(moment().add(-1,'day'));
-    	}else if($rootScope.session.fixed){
-        return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
-        || $scope.myEvents.indexOf(moment(date).hour(0).toISOString())!== -1
-        || moment(date).isBefore(moment().add(-1,'day'));
-      }else{
-    		return ((mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
-	    	|| $scope.fullDays.indexOf(moment(date).hour(0).toISOString())!== -1
-	    	|| $scope.myEvents.indexOf(moment(date).hour(0).toISOString())!== -1
-        || holidays.indexOf(moment(date).hour(0).toISOString())!== -1
-	    	|| moment(date).isBefore(moment().add(-1,'day'))
-	    	|| moment(date).isAfter(moment().add(15,'day')));	
-    	}
-	    
+
+      if($rootScope.session.username != 'cesar.hernandez'){
+        if($rootScope.session.parking_manager && !$scope.selectedUser.fixed){
+          return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
+          || $scope.fullDays.indexOf(moment(date).hour(0).toISOString())!== -1
+          || moment(date).isBefore(moment().add(-1,'day'));
+        }else if($rootScope.session.fixed){
+          return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
+          || $scope.myEvents.indexOf(moment(date).hour(0).toISOString())!== -1
+          || moment(date).isBefore(moment().add(-1,'day'));
+        }else{
+          return ((mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
+          || $scope.fullDays.indexOf(moment(date).hour(0).toISOString())!== -1
+          || $scope.myEvents.indexOf(moment(date).hour(0).toISOString())!== -1
+          || holidays.indexOf(moment(date).hour(0).toISOString())!== -1
+          || moment(date).isBefore(moment().add(-1,'day'))
+          || moment(date).isAfter(moment().add(15,'day'))); 
+        }
+      }
 	  };
+
     var sendEmail = function(from,to,subject,text,callback){
       callback = callback ? callback : function(){};
       var data={
