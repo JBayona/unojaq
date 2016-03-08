@@ -255,7 +255,7 @@ angular.module('vestaParkingApp')
 
     $scope.disabled = function(date, mode) {
 
-      if($rootScope.session.username != 'cesar.hernandez'){
+      if($rootScope.session.username != 'cesar.hernandez'){ //This part
         if($rootScope.session.parking_manager && !$scope.selectedUser.fixed){
           return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6)) 
           || $scope.fullDays.indexOf(moment(date).hour(0).toISOString())!== -1
